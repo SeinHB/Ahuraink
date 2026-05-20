@@ -10,11 +10,14 @@
 </head>
 <body>
 
-  <!-- LANG TOGGLE -->
+   <!-- LANG TOGGLE -->
   <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <span class="lang-sep">|</span>
-    <button class="lang-btn" onclick="setLang('tr')">TR</button>
+    <span class="lang-label" id="langLabel">EN</span>
+    <label class="lang-switch">
+      <input type="checkbox" id="langToggle" onchange="toggleLang(this)">
+      <span class="lang-slider"></span>
+    </label>
+    <span class="lang-label">TR</span>
   </div>
 
   <!-- NAV -->
