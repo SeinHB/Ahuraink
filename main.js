@@ -1,11 +1,11 @@
 /* ===========================
-   DARK INK STUDIO — JS
+   AHURA INK STUDIO — JS
 =========================== */
 
 // ── Language ──────────────────────────────────
 let currentLang = localStorage.getItem('lang') || 'en';
 
-function setLang(lang) {
+function applyLang(lang) {
   currentLang = lang;
   localStorage.setItem('lang', lang);
 
@@ -19,12 +19,33 @@ function setLang(lang) {
     }
   });
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
-  });
-
   document.documentElement.lang = lang === 'tr' ? 'tr' : 'en';
+
+  // sync all toggle checkboxes
+  const isTr = lang === 'tr';
+  document.querySelectorAll('#langToggle, #langToggleMobile').forEach(t => {
+    t.checked = isTr;
+  });
 }
+
+function toggleLang(checkbox) {
+  const lang = checkbox.checked ? 'tr' : 'en';
+  // Sync mobile toggle
+  const mob = document.getElementById('langToggleMobile');
+  if (mob && mob !== checkbox) mob.checked = checkbox.checked;
+  applyLang(lang);
+}
+
+function toggleLangMobile(checkbox) {
+  const lang = checkbox.checked ? 'tr' : 'en';
+  // Sync desktop toggle
+  const desk = document.getElementById('langToggle');
+  if (desk && desk !== checkbox) desk.checked = checkbox.checked;
+  applyLang(lang);
+}
+
+// Legacy support for old setLang calls in portfolio page
+function setLang(lang) { applyLang(lang); }
 
 // ── Nav scroll ────────────────────────────────
 const nav = document.querySelector('.nav');
@@ -104,5 +125,5 @@ function submitForm(e) {
 
 // ── Init ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  setLang(currentLang);
+  applyLang(currentLang);
 });
