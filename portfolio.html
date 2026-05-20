@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — DARK INK STUDIO</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- LANG TOGGLE -->
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" onclick="setLang('tr')">TR</button>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">DARK INK</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-en="Home" data-tr="Ana Sayfa">Home</a>
+      <a href="portfolio.html" class="nav-link active" data-en="Portfolio" data-tr="Portfolyo">Portfolio</a>
+      <a href="index.html#about" class="nav-link" data-en="About" data-tr="Hakkımızda">About</a>
+      <a href="index.html#contact" class="nav-link" data-en="Contact" data-tr="İletişim">Contact</a>
+    </div>
+    <button class="burger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="toggleMenu()" data-en="Home" data-tr="Ana Sayfa">Home</a>
+    <a href="portfolio.html" onclick="toggleMenu()" data-en="Portfolio" data-tr="Portfolyo">Portfolio</a>
+    <a href="index.html#about" onclick="toggleMenu()" data-en="About" data-tr="Hakkımızda">About</a>
+    <a href="index.html#contact" onclick="toggleMenu()" data-en="Contact" data-tr="İletişim">Contact</a>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="noise-overlay"></div>
+    <p class="hero-sub" data-en="— THE WORK —" data-tr="— ESERLER —">— THE WORK —</p>
+    <h1 class="page-title" data-en="PORTFOLIO" data-tr="PORTFOLYO">PORTFOLIO</h1>
+    <p class="page-subtitle" data-en="Every piece is unique. Every story is permanent." data-tr="Her parça benzersizdir. Her hikaye kalıcıdır.">Every piece is unique. Every story is permanent.</p>
+  </header>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterGallery('all')" data-en="All Work" data-tr="Tüm Eserler">All Work</button>
+    <button class="filter-btn" onclick="filterGallery('gothic')" data-en="Gothic" data-tr="Gotik">Gothic</button>
+    <button class="filter-btn" onclick="filterGallery('blackgrey')" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</button>
+    <button class="filter-btn" onclick="filterGallery('neotraditional')" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</button>
+    <button class="filter-btn" onclick="filterGallery('fineline')" data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</button>
+  </div>
+
+  <!-- GALLERY GRID -->
+  <section class="gallery-section">
+    <div class="gallery-grid" id="galleryGrid">
+
+      <!-- GOTHIC -->
+      <div class="gallery-item" data-cat="gothic" onclick="openLightbox(this)">
+        <div class="gallery-thumb gothic-1">
+          <div class="thumb-placeholder"><span>☠</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
+          <span class="gallery-title" data-en="Skull & Roses" data-tr="Kafatası & Güller">Skull & Roses</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
+        <div class="gallery-thumb blackgrey-1">
+          <div class="thumb-placeholder"><span>🌑</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</span>
+          <span class="gallery-title" data-en="Portrait Study" data-tr="Portre Çalışması">Portrait Study</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--wide" data-cat="gothic" onclick="openLightbox(this)">
+        <div class="gallery-thumb gothic-2">
+          <div class="thumb-placeholder"><span>🗡</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
+          <span class="gallery-title" data-en="Dark Cathedral" data-tr="Karanlık Katedral">Dark Cathedral</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="fineline" onclick="openLightbox(this)">
+        <div class="gallery-thumb fineline-1">
+          <div class="thumb-placeholder"><span>🕷</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</span>
+          <span class="gallery-title" data-en="Spider Web" data-tr="Örümcek Ağı">Spider Web</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="neotraditional" onclick="openLightbox(this)">
+        <div class="gallery-thumb neo-1">
+          <div class="thumb-placeholder"><span>🐍</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</span>
+          <span class="gallery-title" data-en="Serpent & Dagger" data-tr="Yılan & Hançer">Serpent & Dagger</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
+        <div class="gallery-thumb blackgrey-2">
+          <div class="thumb-placeholder"><span>🌿</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</span>
+          <span class="gallery-title" data-en="Botanical Dark" data-tr="Botanik Karanlık">Botanical Dark</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--tall" data-cat="gothic" onclick="openLightbox(this)">
+        <div class="gallery-thumb gothic-3">
+          <div class="thumb-placeholder"><span>🦇</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
+          <span class="gallery-title" data-en="Bat & Moon" data-tr="Yarasa & Ay">Bat & Moon</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="fineline" onclick="openLightbox(this)">
+        <div class="gallery-thumb fineline-2">
+          <div class="thumb-placeholder"><span>⚰</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</span>
+          <span class="gallery-title" data-en="Gothic Script" data-tr="Gotik Yazı">Gothic Script</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="neotraditional" onclick="openLightbox(this)">
+        <div class="gallery-thumb neo-2">
+          <div class="thumb-placeholder"><span>🌹</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</span>
+          <span class="gallery-title" data-en="Dark Rose" data-tr="Karanlık Gül">Dark Rose</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
+        <div class="gallery-thumb blackgrey-3">
+          <div class="thumb-placeholder"><span>🌙</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</span>
+          <span class="gallery-title" data-en="Moon Phase" data-tr="Ay Evresi">Moon Phase</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--wide" data-cat="neotraditional" onclick="openLightbox(this)">
+        <div class="gallery-thumb neo-3">
+          <div class="thumb-placeholder"><span>🔱</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</span>
+          <span class="gallery-title" data-en="Full Sleeve Detail" data-tr="Tam Kol Detayı">Full Sleeve Detail</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="gothic" onclick="openLightbox(this)">
+        <div class="gallery-thumb gothic-4">
+          <div class="thumb-placeholder"><span>🕯</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
+          <span class="gallery-title" data-en="Candle & Bones" data-tr="Mum & Kemikler">Candle & Bones</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <div class="lightbox-image" id="lightboxImage"></div>
+      <div class="lightbox-info">
+        <span class="lightbox-cat" id="lightboxCat"></span>
+        <h3 class="lightbox-title" id="lightboxTitle"></h3>
+        <a href="index.html#contact" class="btn-primary" data-en="Book This Style" data-tr="Bu Stili Rezerve Et">Book This Style</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA BOTTOM -->
+  <section class="portfolio-cta">
+    <div class="noise-overlay"></div>
+    <h2 data-en="Like what you see?" data-tr="Gördüklerin hoşuna gitti mi?">Like what you see?</h2>
+    <p data-en="Let's create something dark and beautiful together." data-tr="Birlikte karanlık ve güzel bir şey yaratalım.">Let's create something dark and beautiful together.</p>
+    <a href="index.html#contact" class="btn-primary" data-en="Book a Session" data-tr="Randevu Al">Book a Session</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">DARK INK STUDIO</div>
+      <p class="footer-copy" data-en="© 2025 Dark Ink Studio. All rights reserved." data-tr="© 2025 Dark Ink Studio. Tüm hakları saklıdır.">© 2025 Dark Ink Studio. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html" data-en="Home" data-tr="Ana Sayfa">Home</a>
+        <a href="portfolio.html" data-en="Portfolio" data-tr="Portfolyo">Portfolio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
