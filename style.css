@@ -9,9 +9,9 @@
   --dark:     #1a1a1a;
   --mid:      #2a2a2a;
   --surface:  #1e1e1e;
-  --red:      #c0392b;
-  --red-dim:  #7d1a12;
-  --red-glow: rgba(192,57,43,0.25);
+  --red:      #EBB40F;
+  --red-dim:  #a07a08;
+  --red-glow: rgba(235,180,15,0.25);
   --gold:     #b8963e;
   --gold-dim: #7a6228;
   --bone:     #d4c9b0;
@@ -55,20 +55,30 @@ img { max-width: 100%; display: block; }
    LANGUAGE BAR
 =========================== */
 .lang-bar {
-  position: fixed; top: 0; right: 0; z-index: 200;
+  position: fixed; top: 14px; right: 16px; z-index: 201;
   display: flex; align-items: center; gap: 6px;
-  background: var(--deep); border-bottom: 1px solid var(--mid);
-  border-left: 1px solid var(--mid);
-  padding: 6px 16px;
-  border-bottom-left-radius: 6px;
 }
-.lang-btn {
-  background: none; border: none; color: var(--muted);
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
-  cursor: pointer; padding: 2px 4px; transition: color .2s;
+.lang-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
+  color: var(--muted);
 }
-.lang-btn.active, .lang-btn:hover { color: var(--red); }
-.lang-sep { color: var(--mid); font-size: 11px; }
+/* Toggle switch */
+.lang-switch { position: relative; display: inline-block; width: 36px; height: 18px; cursor: pointer; }
+.lang-switch input { opacity: 0; width: 0; height: 0; }
+.lang-slider {
+  position: absolute; inset: 0; background: var(--mid);
+  border-radius: 18px; transition: background .2s;
+  border: 1px solid #444;
+}
+.lang-slider::before {
+  content: ''; position: absolute; height: 12px; width: 12px;
+  left: 2px; top: 2px; background: var(--red);
+  border-radius: 50%; transition: transform .2s;
+  box-shadow: 0 0 6px var(--red-glow);
+}
+.lang-switch input:checked + .lang-slider::before { transform: translateX(18px); }
+/* Hide desktop lang bar on mobile (will show in nav) */
+@media (max-width: 640px) { .lang-bar { display: none; } }
 
 /* ===========================
    NAV
@@ -104,6 +114,12 @@ img { max-width: 100%; display: block; }
 .burger {
   display: none; background: none; border: none;
   color: var(--text); font-size: 20px; cursor: pointer;
+}
+.nav-right-mobile {
+  display: none; align-items: center; gap: 12px;
+}
+.lang-bar-mobile {
+  display: flex; align-items: center; gap: 6px;
 }
 
 /* ===========================
@@ -157,7 +173,7 @@ img { max-width: 100%; display: block; }
 .hero {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
-  background: radial-gradient(ellipse at center top, #1a0a0a 0%, var(--black) 60%);
+  background: radial-gradient(ellipse at center top, #120e00 0%, var(--black) 60%);
 }
 .hero-bg { position: absolute; inset: 0; }
 .skull-deco {
@@ -234,10 +250,12 @@ img { max-width: 100%; display: block; }
 .section-header {
   display: flex; align-items: center; gap: 24px;
   margin-bottom: 60px; padding: 0 40px;
+  justify-content: center;
 }
 .section-header h2 {
   font-family: var(--font-display); font-size: clamp(18px, 3vw, 26px);
   letter-spacing: .2em; white-space: nowrap; color: var(--text);
+  text-align: center;
 }
 .section-line {
   flex: 1; height: 1px;
@@ -273,8 +291,9 @@ img { max-width: 100%; display: block; }
 .style-card:hover { background: var(--surface); }
 .style-icon {
   font-size: 32px; margin-bottom: 20px;
-  display: block; filter: grayscale(0.3);
+  display: block; filter: grayscale(0.3); width: 52px; height: 52px;
 }
+.style-icon svg { width: 52px; height: 52px; }
 .style-card h3 {
   font-family: var(--font-display); font-size: 15px;
   letter-spacing: .1em; color: var(--gold);
@@ -449,7 +468,7 @@ img { max-width: 100%; display: block; }
   min-height: 50vh; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   position: relative; overflow: hidden;
-  background: radial-gradient(ellipse at center, #150505 0%, var(--black) 70%);
+  background: radial-gradient(ellipse at center, #120e00 0%, var(--black) 70%);
   text-align: center; padding: 120px 40px 80px;
 }
 .page-title {
@@ -584,7 +603,7 @@ img { max-width: 100%; display: block; }
 .portfolio-cta {
   text-align: center; padding: 100px 40px;
   position: relative; overflow: hidden;
-  background: radial-gradient(ellipse at center, #1a0505 0%, var(--black) 70%);
+  background: radial-gradient(ellipse at center, #12100 0%, var(--black) 70%);
   border-top: 1px solid var(--mid);
 }
 .portfolio-cta h2 {
@@ -619,6 +638,7 @@ img { max-width: 100%; display: block; }
   .nav { padding: 0 20px; }
   .nav-links { display: none; }
   .burger { display: block; }
+  .nav-right-mobile { display: flex; }
   .hero-title { font-size: clamp(44px, 15vw, 80px); }
   .hero-cta { flex-direction: column; align-items: center; }
   .styles-section, .about-section, .contact-section,
@@ -632,3 +652,21 @@ img { max-width: 100%; display: block; }
   .about-stats { gap: 24px; }
   .stat-num { font-size: 28px; }
 }
+
+/* ===========================
+   PERSIAN DECO (Hero)
+=========================== */
+.persian-deco {
+  position: absolute; pointer-events: none; user-select: none;
+  color: var(--red); opacity: 0.04;
+  animation: float 10s ease-in-out infinite;
+}
+.persian-1 { top: -40px; left: -60px; width: 320px; height: 320px; animation-delay: 0s; }
+.persian-2 { bottom: -40px; right: -40px; width: 280px; height: 280px; animation-delay: 5s; opacity: 0.03; }
+
+/* Faravahar in about frame */
+.faravahar-svg { width: 160px; height: 180px; display: block; }
+
+/* Contact icon SVG sizing */
+.contact-icon svg { display: block; }
+.contact-icon { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; }
