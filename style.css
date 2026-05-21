@@ -202,13 +202,14 @@ img { max-width: 100%; display: block; }
   50%       { transform: translateY(-20px) rotate(5deg); }
 }
 
-.blood-drip {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 2px; height: 0; background: var(--red);
-  animation: drip 3s ease-out 0.5s forwards;
-  box-shadow: 0 0 10px var(--red);
+.hero-line-top {
+  width: 1px; height: 60px; margin: 0 auto 20px;
+  background: linear-gradient(to bottom, transparent, var(--red));
 }
-@keyframes drip { to { height: 120px; } }
+.hero-line-bottom {
+  width: 1px; height: 60px; margin: 20px auto 0;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+}
 
 .hero-content {
   position: relative; z-index: 2; text-align: center;
@@ -238,17 +239,9 @@ img { max-width: 100%; display: block; }
   display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
   animation: fadeUp .8s ease .6s both;
 }
-.scroll-hint {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
-  color: var(--muted); animation: fadeIn 1s ease 1.5s both;
-}
 .scroll-line {
   width: 1px; height: 40px; background: linear-gradient(to bottom, var(--muted), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
 }
-@keyframes scrollPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes fadeUp {
   from { opacity:0; transform: translateY(30px); }
   to   { opacity:1; transform: translateY(0); }
