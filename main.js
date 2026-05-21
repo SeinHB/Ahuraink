@@ -138,8 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Ink Cursor ────────────────────────────────
 (function() {
   const cursor = document.getElementById('ink-cursor');
-  const inkPath = document.getElementById('ink-path');
-  if (!cursor || !inkPath) return;
+  if (!cursor) return;
 
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
@@ -147,39 +146,108 @@ document.addEventListener('DOMContentLoaded', () => {
   let curY = mouseY;
   let velX = 0;
   let velY = 0;
-  let tick = 0;
 
-  const shapes = [
-    'M14 2 C14 2 24 12 24 22 C24 29 19.5 34 14 34 C8.5 34 4 29 4 22 C4 12 14 2 14 2 Z',
-    'M14 2 C14 2 25 11 25 21 C25 29 20 35 14 35 C8 35 3 29 3 21 C3 11 14 2 14 2 Z',
-    'M14 2 C14 2 23 13 23 23 C23 30 19 34 14 34 C9 34 5 30 5 23 C5 13 14 2 14 2 Z',
-    'M14 3 C14 3 26 13 26 22 C26 30 20.5 35 14 35 C7.5 35 2 30 2 22 C2 13 14 3 14 3 Z',
-    'M14 1 C14 1 24 10 24 21 C24 29 19.5 34 14 34 C8.5 34 4 29 4 21 C4 10 14 1 14 1 Z',
+  const SIZE = 48;
+  const cx = SIZE / 2;
+  const cy = SIZE / 2;
+
+  const circles = [
+    { ox: 0,   oy: 0,   or: 13, x: 0,   y: 0,   r: 13, tx: 0,   ty: 0,   tr: 13, phase: 0    },
+    { ox: 6,   oy: -5,  or: 10, x: 6,   y: -5,  r: 10, tx: 6,   ty: -5,  tr: 10, phase: 1.2  },
+    { ox: -5,  oy: 6,   or: 9,  x: -5,  y: 6,   r: 9,  tx: -5,  ty: 6,   tr: 9,  phase: 2.4  },
+    { ox: 4,   oy: 7,   or: 8,  x: 4,   y: 7,   r: 8,  tx: 4,   ty: 7,   tr: 8,  phase: 0.7  },
   ];
+
+  let retargetTimer = 0;
+
+  function newTarget(c) {
+    c.tx = c.ox + (Math.random() - 0.5) * 10;
+    c.ty = c.oy + (Math.random() - 0.5) * 10;
+    c.tr = c.or + (Math.random() - 0.5) * 6;
+    c.tr = Math.max(5, Math.min(16, c.tr));
+  }
+
+  circles.forEach(c => newTarget(c));
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function buildPath(circs) {
+    const res = 72;
+    const angles = Array.from({ length: res }, (_, i) => (i / res) * Math.PI * 2);
+    const points = angles.map(a => {
+      let px = 0, py = 0, totalW = 0;
+      circs.forEach(c => {
+        const dx = Math.cos(a) * c.r;
+        const dy = Math.sin(a) * c.r;
+        const ex = cx + c.x + dx;
+        const ey = cy + c.y + dy;
+        const w = c.r * c.r;
+        px += ex * w;
+        py += ey * w;
+        totalW += w;
+      });
+      return [px / totalW, py / totalW];
+    });
+
+    const smooth = points.map((p, i) => {
+      const prev = points[(i - 1 + res) % res];
+      const next = points[(i + 1) % res];
+      return [
+        (prev[0] + p[0] * 2 + next[0]) / 4,
+        (prev[1] + p[1] * 2 + next[1]) / 4,
+      ];
+    });
+
+    return smooth.map((p, i) => {
+      const next = smooth[(i + 1) % res];
+      const cpx = (p[0] + next[0]) / 2;
+      const cpy = (p[1] + next[1]) / 2;
+      return (i === 0 ? `M${cpx.toFixed(2)},${cpy.toFixed(2)}` : '') +
+        `Q${p[0].toFixed(2)},${p[1].toFixed(2)} ${cpx.toFixed(2)},${cpy.toFixed(2)}`;
+    }).join(' ') + ' Z';
+  }
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${SIZE} ${SIZE}`);
+  svg.style.cssText = 'width:100%;height:100%;overflow:visible;';
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('fill', '#ffffff');
+  svg.appendChild(path);
+  cursor.innerHTML = '';
+  cursor.appendChild(svg);
 
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
   });
 
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
+  let frame = 0;
   function animate() {
-    tick++;
-
+    frame++;
     velX = mouseX - curX;
     velY = mouseY - curY;
-    curX = lerp(curX, mouseX, 0.12);
-    curY = lerp(curY, mouseY, 0.12);
-
+    curX = lerp(curX, mouseX, 0.1);
+    curY = lerp(curY, mouseY, 0.1);
     const speed = Math.sqrt(velX * velX + velY * velY);
+
+    retargetTimer++;
+    if (retargetTimer > 80) {
+      retargetTimer = 0;
+      circles.forEach(c => newTarget(c));
+    }
+
+    circles.forEach((c, i) => {
+      const t = 0.012 + speed * 0.001;
+      c.x = lerp(c.x, c.tx, t);
+      c.y = lerp(c.y, c.ty, t);
+      c.r = lerp(c.r, c.tr + Math.sin(frame * 0.025 + c.phase) * 2, t + 0.008);
+    });
+
     const angle = Math.atan2(velY, velX) * (180 / Math.PI) + 90;
-    const squish = Math.min(speed * 0.4, 18);
+    const stretch = Math.min(speed * 0.03, 0.35);
 
-    const shapeIndex = Math.floor(tick / 8) % shapes.length;
-    inkPath.setAttribute('d', shapes[shapeIndex]);
-
-    cursor.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%) rotate(${angle}deg) scaleX(${1 - squish * 0.015}) scaleY(${1 + squish * 0.025})`;
+    path.setAttribute('d', buildPath(circles));
+    cursor.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%) rotate(${angle}deg) scaleX(${1 - stretch}) scaleY(${1 + stretch})`;
 
     requestAnimationFrame(animate);
   }
