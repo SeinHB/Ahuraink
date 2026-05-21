@@ -44,8 +44,15 @@ function toggleLangMobile(checkbox) {
   applyLang(lang);
 }
 
-// Legacy support for old setLang calls in portfolio page
-function setLang(lang) { applyLang(lang); }
+function toggleMobileLangBtn() {
+  const btn = document.getElementById('mobileLangBtn');
+  const isEn = btn.textContent === 'TR';
+  const lang = isEn ? 'tr' : 'en';
+  btn.textContent = isEn ? 'EN' : 'TR';
+  applyLang(lang);
+}
+
+
 
 // ── Nav scroll ────────────────────────────────
 const nav = document.querySelector('.nav');
