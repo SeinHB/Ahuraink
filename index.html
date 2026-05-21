@@ -10,16 +10,6 @@
 </head>
 <body>
 
-   <!-- LANG TOGGLE -->
-  <div class="lang-bar">
-    <span class="lang-label" id="langLabel">EN</span>
-    <label class="lang-switch">
-      <input type="checkbox" id="langToggle" onchange="toggleLang(this)">
-      <span class="lang-slider"></span>
-    </label>
-    <span class="lang-label">TR</span>
-  </div>
-
   <!-- NAV -->
   <nav class="nav">
     <a href="index.html" class="nav-logo">Ahura INK</a>
@@ -29,6 +19,15 @@
       <a href="#about" class="nav-link" data-en="About" data-tr="Hakkımızda">About</a>
       <a href="#contact" class="nav-link" data-en="Contact" data-tr="İletişim">Contact</a>
     </div>
+    <div class="nav-right">
+      <span class="lang-label">EN</span>
+      <label class="lang-switch">
+        <input type="checkbox" id="langToggle" onchange="toggleLang(this)">
+        <span class="lang-slider"></span>
+      </label>
+      <span class="lang-label">TR</span>
+    </div>
+    <button class="mobile-lang-btn" id="mobileLangBtn" onclick="toggleMobileLangBtn()">TR</button>
     <button class="burger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
   </nav>
 
