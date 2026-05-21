@@ -134,3 +134,55 @@ function submitForm(e) {
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(currentLang);
 });
+
+// ── Ink Cursor ────────────────────────────────
+(function() {
+  const cursor = document.getElementById('ink-cursor');
+  const inkPath = document.getElementById('ink-path');
+  if (!cursor || !inkPath) return;
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let curX = mouseX;
+  let curY = mouseY;
+  let velX = 0;
+  let velY = 0;
+  let tick = 0;
+
+  const shapes = [
+    'M14 2 C14 2 24 12 24 22 C24 29 19.5 34 14 34 C8.5 34 4 29 4 22 C4 12 14 2 14 2 Z',
+    'M14 2 C14 2 25 11 25 21 C25 29 20 35 14 35 C8 35 3 29 3 21 C3 11 14 2 14 2 Z',
+    'M14 2 C14 2 23 13 23 23 C23 30 19 34 14 34 C9 34 5 30 5 23 C5 13 14 2 14 2 Z',
+    'M14 3 C14 3 26 13 26 22 C26 30 20.5 35 14 35 C7.5 35 2 30 2 22 C2 13 14 3 14 3 Z',
+    'M14 1 C14 1 24 10 24 21 C24 29 19.5 34 14 34 C8.5 34 4 29 4 21 C4 10 14 1 14 1 Z',
+  ];
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function animate() {
+    tick++;
+
+    velX = mouseX - curX;
+    velY = mouseY - curY;
+    curX = lerp(curX, mouseX, 0.12);
+    curY = lerp(curY, mouseY, 0.12);
+
+    const speed = Math.sqrt(velX * velX + velY * velY);
+    const angle = Math.atan2(velY, velX) * (180 / Math.PI) + 90;
+    const squish = Math.min(speed * 0.4, 18);
+
+    const shapeIndex = Math.floor(tick / 8) % shapes.length;
+    inkPath.setAttribute('d', shapes[shapeIndex]);
+
+    cursor.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%) rotate(${angle}deg) scaleX(${1 - squish * 0.015}) scaleY(${1 + squish * 0.025})`;
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
