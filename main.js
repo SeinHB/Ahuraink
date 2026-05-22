@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       circles[i].setAttribute('r', Math.max(2, b.r).toFixed(2));
     });
 
-    const stretch = Math.min(speed * 0.025, 0.3);
+    const stretch = Math.min(speed * 0.025 * 0.25, 0.3 * 0.25);
     const angle = speed > 0.5 ? Math.atan2(smoothVelY, smoothVelX) * (180 / Math.PI) : 0;
     cursor.style.transform = `translate(${mouseX}px,${mouseY}px) translate(-50%,-50%) rotate(${angle}deg) scaleX(${1 + stretch}) scaleY(${1 - stretch}) rotate(${-angle}deg)`;
 
@@ -303,8 +303,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (trail.length > 1) {
       for (let i = 1; i < trail.length; i++) {
         const t = i / trail.length;           // 0 = oldest, 1 = newest
-        const alpha = Math.pow(t, 2) * 0.55;  // fade out toward tail, max 55% opacity
-        const width = t * 3;                  // taper from 0 to 3px
+        const alpha = Math.pow(t, 2) * 0.5;
+        const width = 0.1 + t * 1.9;
 
         ctx.beginPath();
         ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
