@@ -688,7 +688,7 @@ img { max-width: 100%; display: block; }
 #ink-cursor {
   position: fixed;
   top: 0; left: 0;
-  width: 48px; height: 48px;
+  width: 56px; height: 56px;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
