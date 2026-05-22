@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const stretch = Math.min(speed * 0.025, 0.3);
     const angle = speed > 0.5 ? Math.atan2(smoothVelY, smoothVelX) * (180 / Math.PI) : 0;
-    cursor.style.transform = `translate(${curX}px,${curY}px) translate(-50%,-50%) rotate(${angle}deg) scaleX(${1 + stretch}) scaleY(${1 - stretch}) rotate(${-angle}deg)`;
+    cursor.style.transform = `translate(${mouseX}px,${mouseY}px) translate(-50%,-50%) rotate(${angle}deg) scaleX(${1 + stretch}) scaleY(${1 - stretch}) rotate(${-angle}deg)`;
 
     requestAnimationFrame(animate);
   }
@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const MAX_POINTS = 28;
 
   const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99998;';
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100000;';
   document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
 
