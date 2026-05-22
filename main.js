@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
 (function() {
   let mouseX = 0, mouseY = 0;
   const trail = [];
-  const MAX_POINTS = 28;
+  const MAX_POINTS = 48;
 
   const canvas = document.createElement('canvas');
   canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100000;';
@@ -304,17 +304,17 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 1; i < trail.length - 1; i++) {
         const t = i / (trail.length - 1);
         const alpha = Math.pow(t, 2) * 0.5;
-        const width = 0.1 + t * 1.9;
+        const width = 0.1 + t * 7.9;
 
         const p0 = trail[Math.max(i - 1, 0)];
         const p1 = trail[i];
         const p2 = trail[Math.min(i + 1, trail.length - 1)];
         const p3 = trail[Math.min(i + 2, trail.length - 1)];
 
-        const cp1x = p1.x + (p2.x - p0.x) / 6;
-        const cp1y = p1.y + (p2.y - p0.y) / 6;
-        const cp2x = p2.x - (p3.x - p1.x) / 6;
-        const cp2y = p2.y - (p3.y - p1.y) / 6;
+        const cp1x = p1.x + (p2.x - p0.x) / 3;
+        const cp1y = p1.y + (p2.y - p0.y) / 3;
+        const cp2x = p2.x - (p3.x - p1.x) / 3;
+        const cp2y = p2.y - (p3.y - p1.y) / 3;
 
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
