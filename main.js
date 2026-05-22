@@ -234,8 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     velX = mouseX - curX;
     velY = mouseY - curY;
-    curX = lerp(curX, mouseX, 0.1);
-    curY = lerp(curY, mouseY, 0.1);
+    curX = lerp(curX, mouseX, 0.99);
+    curY = lerp(curY, mouseY, 0.99);
 
     // Smooth velocity for pull effect
     smoothVelX = lerp(smoothVelX, velX, 0.15);
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const stretch = Math.min(speed * 0.025 * 0.25, 0.3 * 0.25);
     const angle = speed > 0.5 ? Math.atan2(smoothVelY, smoothVelX) * (180 / Math.PI) : 0;
-    cursor.style.transform = `translate(${mouseX}px,${mouseY}px) translate(-50%,-50%) rotate(${angle}deg) scaleX(${1 + stretch}) scaleY(${1 - stretch}) rotate(${-angle}deg)`;
+    cursor.style.transform = `translate(${curX}px,${curY}px) translate(-50%,-50%) rotate(${angle}deg) scaleX(${1 + stretch}) scaleY(${1 - stretch}) rotate(${-angle}deg)`;
 
     requestAnimationFrame(animate);
   }
@@ -301,27 +301,42 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (trail.length > 2) {
-      for (let i = 1; i < trail.length - 1; i++) {
-        const t = i / (trail.length - 1);
-        const alpha = Math.pow(t, 2) * 0.5;
-        const width = 0.1 + t * 7.9;
+      const n = trail.length;
 
+      // Build control points for full spline
+      const cps = [];
+      for (let i = 0; i < n; i++) {
         const p0 = trail[Math.max(i - 1, 0)];
         const p1 = trail[i];
-        const p2 = trail[Math.min(i + 1, trail.length - 1)];
-        const p3 = trail[Math.min(i + 2, trail.length - 1)];
+        const p2 = trail[Math.min(i + 1, n - 1)];
+        const p3 = trail[Math.min(i + 2, n - 1)];
+        cps.push({
+          cp1x: p1.x + (p2.x - p0.x) / 3,
+          cp1y: p1.y + (p2.y - p0.y) / 3,
+          cp2x: p2.x - (p3.x - p1.x) / 3,
+          cp2y: p2.y - (p3.y - p1.y) / 3,
+        });
+      }
 
-        const cp1x = p1.x + (p2.x - p0.x) / 3;
-        const cp1y = p1.y + (p2.y - p0.y) / 3;
-        const cp2x = p2.x - (p3.x - p1.x) / 3;
-        const cp2y = p2.y - (p3.y - p1.y) / 3;
+      // Draw in slices from tail to head, each slice one solid color+width
+      // Use small slices so the gradient appears smooth with no overlap artifacts
+      const SLICES = n - 1;
+      for (let i = 0; i < SLICES; i++) {
+        const t0 = i / SLICES;
+        const t1 = (i + 1) / SLICES;
+        const tMid = (t0 + t1) / 2;
+        const alpha = Math.pow(tMid, 2) * 0.5;
+        const width = 0.1 + tMid * 7.9;
+        const cp = cps[i];
+        const p1 = trail[i];
+        const p2 = trail[i + 1];
 
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
-        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        ctx.bezierCurveTo(cp.cp1x, cp.cp1y, cp.cp2x, cp.cp2y, p2.x, p2.y);
         ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
         ctx.lineWidth = width;
-        ctx.lineCap = 'round';
+        ctx.lineCap = 'butt';
         ctx.lineJoin = 'round';
         ctx.stroke();
       }
