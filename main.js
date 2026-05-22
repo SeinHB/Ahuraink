@@ -264,10 +264,100 @@ document.addEventListener('DOMContentLoaded', () => {
       circles[i].setAttribute('r', Math.max(2, b.r).toFixed(2));
     });
 
-    cursor.style.transform = `translate(${curX}px,${curY}px) translate(-50%,-50%)`;
+    const stretch = Math.min(speed * 0.025, 0.3);
+    cursor.style.transform = `translate(${curX}px,${curY}px) translate(-50%,-50%) scaleX(${1 - stretch}) scaleY(${1 + stretch})`;
 
     requestAnimationFrame(animate);
   }
 
   animate();
+})();
+
+// ── Ink Particles ─────────────────────────────
+(function() {
+  let mouseX = 0, mouseY = 0;
+  let lastX = 0, lastY = 0;
+  const particles = [];
+  const MAX = 18;
+  const LIFE = 60; // frames ~1s at 60fps
+
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99998;';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function spawn() {
+    const dx = mouseX - lastX;
+    const dy = mouseY - lastY;
+    const speed = Math.sqrt(dx * dx + dy * dy);
+    if (speed < 2) return;
+
+    // Spawn 1-2 particles per move
+    const count = speed > 8 ? 2 : 1;
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 26 + Math.random() * 14; // outside the 56px frame
+      const r = Math.random() > 0.5 ? 2 : 1.5;
+      particles.push({
+        x: mouseX + Math.cos(angle) * dist,
+        y: mouseY + Math.sin(angle) * dist,
+        r,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        life: LIFE,
+        maxLife: LIFE,
+      });
+    }
+
+    if (particles.length > MAX) particles.splice(0, particles.length - MAX);
+    lastX = mouseX;
+    lastY = mouseY;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    spawn();
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.life--;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+
+      const progress = p.life / p.maxLife;
+      // Fade in quickly, fade out slowly
+      const alpha = progress < 0.8
+        ? progress / 0.8
+        : 1 - ((1 - progress) / 0.2) * 0;
+      const opacity = progress > 0.85 ? 1 : progress / 0.85;
+
+      ctx.save();
+      ctx.globalAlpha = opacity;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
 })();
