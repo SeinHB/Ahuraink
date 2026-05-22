@@ -234,8 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     velX = mouseX - curX;
     velY = mouseY - curY;
-    curX = lerp(curX, mouseX, 0.99);
-    curY = lerp(curY, mouseY, 0.99);
+    curX = lerp(curX, mouseX, 0.96);
+    curY = lerp(curY, mouseY, 0.96);
 
     // Smooth velocity for pull effect
     smoothVelX = lerp(smoothVelX, velX, 0.15);
