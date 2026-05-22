@@ -300,15 +300,25 @@ document.addEventListener('DOMContentLoaded', () => {
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (trail.length > 1) {
-      for (let i = 1; i < trail.length; i++) {
-        const t = i / trail.length;           // 0 = oldest, 1 = newest
+    if (trail.length > 2) {
+      for (let i = 1; i < trail.length - 1; i++) {
+        const t = i / (trail.length - 1);
         const alpha = Math.pow(t, 2) * 0.5;
         const width = 0.1 + t * 1.9;
 
+        const p0 = trail[Math.max(i - 1, 0)];
+        const p1 = trail[i];
+        const p2 = trail[Math.min(i + 1, trail.length - 1)];
+        const p3 = trail[Math.min(i + 2, trail.length - 1)];
+
+        const cp1x = p1.x + (p2.x - p0.x) / 6;
+        const cp1y = p1.y + (p2.y - p0.y) / 6;
+        const cp2x = p2.x - (p3.x - p1.x) / 6;
+        const cp2y = p2.y - (p3.y - p1.y) / 6;
+
         ctx.beginPath();
-        ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
-        ctx.lineTo(trail[i].x, trail[i].y);
+        ctx.moveTo(p1.x, p1.y);
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
         ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
         ctx.lineWidth = width;
         ctx.lineCap = 'round';
