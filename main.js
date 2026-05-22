@@ -144,19 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
   let mouseY = window.innerHeight / 2;
   let curX = mouseX, curY = mouseY;
   let velX = 0, velY = 0;
+  let smoothVelX = 0, smoothVelY = 0;
   let frame = 0;
 
-  const S = 96; // viewBox size — larger internally so blur has room
+  const S = 112;
   const H = S / 2;
 
-  // Corner base positions within the 96x96 viewBox
-  // Center + 4 corners spread around it
   const BASE = [
-    { bx: 0,   by: 0   }, // center — fixed
-    { bx: -18, by: -18 }, // top left
-    { bx:  18, by: -18 }, // top right
-    { bx: -18, by:  18 }, // bottom left
-    { bx:  18, by:  18 }, // bottom right
+    { bx: 0,   by: 0   },
+    { bx: -20, by: -20 },
+    { bx:  20, by: -20 },
+    { bx: -20, by:  20 },
+    { bx:  20, by:  20 },
   ];
 
   const balls = BASE.map((b, i) => ({
@@ -174,21 +173,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (b.fixed) return;
       b.tx = BASE[i].bx + (Math.random() - 0.5) * 16;
       b.ty = BASE[i].by + (Math.random() - 0.5) * 16;
-      b.tr = 14 + Math.random() * 22; // r 14 to 36 = diameter 28 to 72... clamp to our range
-      b.tr = Math.min(b.tr, 30);
+      b.tr = 14 + Math.random() * 16;
+      b.tr = Math.min(b.tr, 28);
     });
   }
   newTargets();
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
-  // Build SVG with goo filter for welding
   const ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg');
   svg.setAttribute('viewBox', `0 0 ${S} ${S}`);
   svg.style.cssText = 'width:100%;height:100%;overflow:visible;';
 
-  // Goo filter: blur → color matrix threshold → dilate to smooth edges
   const defs = document.createElementNS(ns, 'defs');
   const filter = document.createElementNS(ns, 'filter');
   filter.setAttribute('id', 'goo');
@@ -199,14 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const blur = document.createElementNS(ns, 'feGaussianBlur');
   blur.setAttribute('in', 'SourceGraphic');
-  blur.setAttribute('stdDeviation', '5');
+  blur.setAttribute('stdDeviation', '8');
   blur.setAttribute('result', 'blur');
 
   const matrix = document.createElementNS(ns, 'feColorMatrix');
   matrix.setAttribute('in', 'blur');
   matrix.setAttribute('type', 'matrix');
-  // threshold: keeps only areas where alpha is high — creates sharp merged edges
-  matrix.setAttribute('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9');
+  matrix.setAttribute('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 28 -11');
   matrix.setAttribute('result', 'goo');
 
   filter.appendChild(blur);
@@ -214,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
   defs.appendChild(filter);
   svg.appendChild(defs);
 
-  // Group with goo filter applied
   const g = document.createElementNS(ns, 'g');
   g.setAttribute('filter', 'url(#goo)');
 
@@ -241,17 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
     velY = mouseY - curY;
     curX = lerp(curX, mouseX, 0.1);
     curY = lerp(curY, mouseY, 0.1);
-    const speed = Math.sqrt(velX * velX + velY * velY);
+
+    // Smooth velocity for pull effect
+    smoothVelX = lerp(smoothVelX, velX, 0.15);
+    smoothVelY = lerp(smoothVelY, velY, 0.15);
+
+    const speed = Math.sqrt(smoothVelX * smoothVelX + smoothVelY * smoothVelY);
+    const pullStrength = Math.min(speed * 0.6, 14);
+    const pullX = speed > 0.1 ? (smoothVelX / speed) * pullStrength : 0;
+    const pullY = speed > 0.1 ? (smoothVelY / speed) * pullStrength : 0;
 
     retarget++;
     if (retarget > 90) { retarget = 0; newTargets(); }
 
-    const t = 0.008 + speed * 0.001;
+    const t = 0.008;
 
     balls.forEach((b, i) => {
       if (!b.fixed) {
-        b.x = lerp(b.x, b.tx + Math.sin(frame * 0.018 + b.phase) * 3, t);
-        b.y = lerp(b.y, b.ty + Math.cos(frame * 0.022 + b.phase) * 3, t);
+        const idleX = b.tx + Math.sin(frame * 0.018 + b.phase) * 3;
+        const idleY = b.ty + Math.cos(frame * 0.022 + b.phase) * 3;
+        b.x = lerp(b.x, idleX + pullX, t + 0.04);
+        b.y = lerp(b.y, idleY + pullY, t + 0.04);
         b.r = lerp(b.r, b.tr + Math.sin(frame * 0.028 + b.phase * 1.3) * 2, t + 0.005);
       }
       circles[i].setAttribute('cx', (H + b.x).toFixed(2));
@@ -259,9 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       circles[i].setAttribute('r', Math.max(2, b.r).toFixed(2));
     });
 
-    const angle = speed > 0.5 ? Math.atan2(velY, velX) * (180 / Math.PI) + 90 : 0;
-    const stretch = Math.min(speed * 0.025, 0.3);
-    cursor.style.transform = `translate(${curX}px,${curY}px) translate(-50%,-50%) rotate(${angle}deg) scaleX(${1 - stretch}) scaleY(${1 + stretch})`;
+    cursor.style.transform = `translate(${curX}px,${curY}px) translate(-50%,-50%)`;
 
     requestAnimationFrame(animate);
   }
