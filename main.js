@@ -146,153 +146,97 @@ document.addEventListener('DOMContentLoaded', () => {
   let velX = 0, velY = 0;
   let frame = 0;
 
-  const S = 48;
-  const HALF = S / 2;
-  const THRESHOLD = 1.0;
-  const GRID = 3;
+  const S = 96; // viewBox size — larger internally so blur has room
+  const H = S / 2;
 
-  // 4 metaballs — each has position, radius, all slowly drifting
-  const balls = [
-    { x: 0,    y: -4,   r: 13, px: 0,    py: -4,   pr: 13, tx: 0,    ty: -4,   tr: 13,  phase: 0    },
-    { x: 6,    y: 4,    r: 10, px: 6,    py: 4,    pr: 10, tx: 6,    ty: 4,    tr: 10,  phase: 1.6  },
-    { x: -7,   y: 5,    r: 9,  px: -7,   py: 5,    pr: 9,  tx: -7,   ty: 5,    tr: 9,   phase: 3.1  },
-    { x: 3,    y: -8,   r: 7,  px: 3,    py: -8,   pr: 7,  tx: 3,    ty: -8,   tr: 7,   phase: 4.7  },
+  // Corner base positions within the 96x96 viewBox
+  // Center + 4 corners spread around it
+  const BASE = [
+    { bx: 0,   by: 0   }, // center — fixed
+    { bx: -18, by: -18 }, // top left
+    { bx:  18, by: -18 }, // top right
+    { bx: -18, by:  18 }, // bottom left
+    { bx:  18, by:  18 }, // bottom right
   ];
+
+  const balls = BASE.map((b, i) => ({
+    x: b.bx, y: b.by,
+    r: 14,
+    tx: b.bx, ty: b.by, tr: 14,
+    fixed: i === 0,
+    phase: i * 1.3,
+  }));
 
   let retarget = 0;
 
   function newTargets() {
-    balls.forEach(b => {
-      b.tx = (Math.random() - 0.5) * 14;
-      b.ty = (Math.random() - 0.5) * 14;
-      b.tr = 6 + Math.random() * 9;
+    balls.forEach((b, i) => {
+      if (b.fixed) return;
+      b.tx = BASE[i].bx + (Math.random() - 0.5) * 16;
+      b.ty = BASE[i].by + (Math.random() - 0.5) * 16;
+      b.tr = 14 + Math.random() * 22; // r 14 to 36 = diameter 28 to 72... clamp to our range
+      b.tr = Math.min(b.tr, 30);
     });
   }
   newTargets();
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
-  // Marching squares — sample metaball field on a grid, extract contour
-  function field(px, py) {
-    let v = 0;
-    for (let i = 0; i < balls.length; i++) {
-      const b = balls[i];
-      const dx = px - (HALF + b.x);
-      const dy = py - (HALF + b.y);
-      const d2 = dx * dx + dy * dy;
-      if (d2 < 0.01) return 999;
-      v += (b.r * b.r) / d2;
-    }
-    return v;
-  }
-
-  // March along the iso-contour
-  function march() {
-    const pts = [];
-    const cols = Math.ceil(S / GRID) + 1;
-    const rows = Math.ceil(S / GRID) + 1;
-    const cells = [];
-
-    for (let j = 0; j <= rows; j++) {
-      cells[j] = [];
-      for (let i = 0; i <= cols; i++) {
-        cells[j][i] = field(i * GRID, j * GRID);
-      }
-    }
-
-    const edgePts = [];
-
-    for (let j = 0; j < rows; j++) {
-      for (let i = 0; i < cols; i++) {
-        const x0 = i * GRID, x1 = (i + 1) * GRID;
-        const y0 = j * GRID, y1 = (j + 1) * GRID;
-        const f00 = cells[j][i], f10 = cells[j][i+1];
-        const f01 = cells[j+1][i], f11 = cells[j+1][i+1];
-
-        const interp = (a, b, va, vb) => {
-          if (Math.abs(vb - va) < 0.001) return (a + b) / 2;
-          return a + (THRESHOLD - va) / (vb - va) * (b - a);
-        };
-
-        const idx =
-          (f00 >= THRESHOLD ? 1 : 0) |
-          (f10 >= THRESHOLD ? 2 : 0) |
-          (f11 >= THRESHOLD ? 4 : 0) |
-          (f01 >= THRESHOLD ? 8 : 0);
-
-        const top    = [interp(x0, x1, f00, f10), y0];
-        const right  = [x1, interp(y0, y1, f10, f11)];
-        const bottom = [interp(x0, x1, f01, f11), y1];
-        const left   = [x0, interp(y0, y1, f00, f01)];
-
-        const segs = {
-          1: [[left, top]], 2: [[top, right]], 3: [[left, right]],
-          4: [[right, bottom]], 5: [[left, top], [right, bottom]],
-          6: [[top, bottom]], 7: [[left, bottom]], 8: [[bottom, left]],
-          9: [[bottom, top]], 10: [[top, left], [bottom, right]],
-          11: [[bottom, right]], 12: [[right, left]], 13: [[right, top]],
-          14: [[left, top]], 15: []
-        };
-
-        if (idx > 0 && idx < 15 && segs[idx]) {
-          segs[idx].forEach(([a, b]) => edgePts.push([a, b]));
-        }
-      }
-    }
-
-    if (edgePts.length === 0) return '';
-
-    // Chain edge segments into a polygon
-    const ordered = [edgePts[0][0], edgePts[0][1]];
-    const used = new Array(edgePts.length).fill(false);
-    used[0] = true;
-
-    for (let iter = 0; iter < edgePts.length; iter++) {
-      const last = ordered[ordered.length - 1];
-      let found = false;
-      for (let k = 0; k < edgePts.length; k++) {
-        if (used[k]) continue;
-        const [a, b] = edgePts[k];
-        const da = Math.hypot(a[0] - last[0], a[1] - last[1]);
-        const db = Math.hypot(b[0] - last[0], b[1] - last[1]);
-        if (da < GRID * 1.5) { ordered.push(b); used[k] = true; found = true; break; }
-        if (db < GRID * 1.5) { ordered.push(a); used[k] = true; found = true; break; }
-      }
-      if (!found) break;
-    }
-
-    if (ordered.length < 4) return '';
-
-    // Smooth the polygon with catmull-rom-like beziers
-    const n = ordered.length;
-    let d = `M${ordered[0][0].toFixed(1)},${ordered[0][1].toFixed(1)}`;
-    for (let i = 0; i < n; i++) {
-      const p0 = ordered[(i - 1 + n) % n];
-      const p1 = ordered[i];
-      const p2 = ordered[(i + 1) % n];
-      const p3 = ordered[(i + 2) % n];
-      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
-      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
-      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
-      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
-      d += ` C${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
-    }
-    return d + ' Z';
-  }
-
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  // Build SVG with goo filter for welding
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
   svg.setAttribute('viewBox', `0 0 ${S} ${S}`);
   svg.style.cssText = 'width:100%;height:100%;overflow:visible;';
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('fill', '#ffffff');
-  svg.appendChild(path);
+
+  // Goo filter: blur → color matrix threshold → dilate to smooth edges
+  const defs = document.createElementNS(ns, 'defs');
+  const filter = document.createElementNS(ns, 'filter');
+  filter.setAttribute('id', 'goo');
+  filter.setAttribute('x', '-50%');
+  filter.setAttribute('y', '-50%');
+  filter.setAttribute('width', '200%');
+  filter.setAttribute('height', '200%');
+
+  const blur = document.createElementNS(ns, 'feGaussianBlur');
+  blur.setAttribute('in', 'SourceGraphic');
+  blur.setAttribute('stdDeviation', '5');
+  blur.setAttribute('result', 'blur');
+
+  const matrix = document.createElementNS(ns, 'feColorMatrix');
+  matrix.setAttribute('in', 'blur');
+  matrix.setAttribute('type', 'matrix');
+  // threshold: keeps only areas where alpha is high — creates sharp merged edges
+  matrix.setAttribute('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9');
+  matrix.setAttribute('result', 'goo');
+
+  filter.appendChild(blur);
+  filter.appendChild(matrix);
+  defs.appendChild(filter);
+  svg.appendChild(defs);
+
+  // Group with goo filter applied
+  const g = document.createElementNS(ns, 'g');
+  g.setAttribute('filter', 'url(#goo)');
+
+  const circles = balls.map(() => {
+    const c = document.createElementNS(ns, 'circle');
+    c.setAttribute('fill', '#ffffff');
+    g.appendChild(c);
+    return c;
+  });
+
+  svg.appendChild(g);
   cursor.innerHTML = '';
   cursor.appendChild(svg);
 
-  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
 
   function animate() {
     frame++;
+
     velX = mouseX - curX;
     velY = mouseY - curY;
     curX = lerp(curX, mouseX, 0.1);
@@ -300,17 +244,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const speed = Math.sqrt(velX * velX + velY * velY);
 
     retarget++;
-    if (retarget > 100) { retarget = 0; newTargets(); }
+    if (retarget > 90) { retarget = 0; newTargets(); }
 
-    const t = 0.008 + speed * 0.0008;
+    const t = 0.008 + speed * 0.001;
+
     balls.forEach((b, i) => {
-      b.x = lerp(b.x, b.tx + Math.sin(frame * 0.018 + b.phase) * 2.5, t);
-      b.y = lerp(b.y, b.ty + Math.cos(frame * 0.022 + b.phase) * 2.5, t);
-      b.r = lerp(b.r, b.tr + Math.sin(frame * 0.03 + b.phase * 1.3) * 1.5, t + 0.005);
+      if (!b.fixed) {
+        b.x = lerp(b.x, b.tx + Math.sin(frame * 0.018 + b.phase) * 3, t);
+        b.y = lerp(b.y, b.ty + Math.cos(frame * 0.022 + b.phase) * 3, t);
+        b.r = lerp(b.r, b.tr + Math.sin(frame * 0.028 + b.phase * 1.3) * 2, t + 0.005);
+      }
+      circles[i].setAttribute('cx', (H + b.x).toFixed(2));
+      circles[i].setAttribute('cy', (H + b.y).toFixed(2));
+      circles[i].setAttribute('r', Math.max(2, b.r).toFixed(2));
     });
-
-    const d = march();
-    if (d) path.setAttribute('d', d);
 
     const angle = speed > 0.5 ? Math.atan2(velY, velX) * (180 / Math.PI) + 90 : 0;
     const stretch = Math.min(speed * 0.025, 0.3);
