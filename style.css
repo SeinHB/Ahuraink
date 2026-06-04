@@ -329,9 +329,9 @@ img { max-width: 100%; display: block; }
 
 .specialty-footer {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 48px 16px 18px;
-  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
-  display: flex; justify-content: center; align-items: flex-end;
+  padding: 14px 16px;
+  background: rgba(232, 224, 208, 0.92);
+  display: flex; justify-content: center; align-items: center;
 }
 .specialty-title {
   font-family: var(--font-display);
@@ -339,7 +339,6 @@ img { max-width: 100%; display: block; }
   letter-spacing: .08em;
   color: var(--black);
   text-align: center;
-  text-shadow: 0 1px 6px rgba(255,255,255,0.15);
 }
 .specialty-arrow {
   position: absolute;
