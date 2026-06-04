@@ -85,14 +85,29 @@ document.querySelectorAll(
 });
 
 // ── Gallery filter ────────────────────────────
-function filterGallery(cat) {
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+function filterGallery(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = btn || (event && event.currentTarget);
+  if (activeBtn) activeBtn.classList.add('active');
 
   document.querySelectorAll('.gallery-item').forEach(item => {
     const show = cat === 'all' || item.dataset.cat === cat;
     item.classList.toggle('hidden', !show);
   });
+}
+
+// ── Navigate to portfolio with filter ─────────
+function goToPortfolio(cat) {
+  window.location.href = 'portfolio.html?filter=' + cat;
+}
+
+// ── Auto-apply filter from URL param ──────────
+function applyFilterFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('filter');
+  if (!cat) return;
+  const btn = document.querySelector(`.filter-btn[onclick*="'${cat}'"]`);
+  filterGallery(cat, btn);
 }
 
 // ── Lightbox ──────────────────────────────────
@@ -133,6 +148,7 @@ function submitForm(e) {
 // ── Init ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(currentLang);
+  applyFilterFromURL();
 });
 
 // ── Ink Cursor ────────────────────────────────
