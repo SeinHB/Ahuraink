@@ -291,16 +291,20 @@ img { max-width: 100%; display: block; }
    STYLES SECTION — SPECIALTY CARDS
 =========================== */
 .styles-section {
-  padding: 100px 40px;
+  padding: 100px 0;
   background: var(--deep);
   border-top: 1px solid var(--mid);
   border-bottom: 1px solid var(--mid);
 }
+.styles-section .section-header {
+  padding: 0 40px;
+  margin-bottom: 40px;
+}
 .specialty-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 3px;
-  max-width: 1200px; margin: 0 auto;
+  gap: 0;
+  width: 100%;
 }
 .specialty-card {
   position: relative;
@@ -308,7 +312,7 @@ img { max-width: 100%; display: block; }
   cursor: pointer;
   aspect-ratio: 1/1;
   background: var(--dark);
-  border: 1px solid var(--mid);
+  border: none;
   transition: transform .45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .specialty-card:hover { transform: scale(0.96); }
@@ -329,41 +333,48 @@ img { max-width: 100%; display: block; }
 
 .specialty-footer {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 56px 16px 18px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.82) 100%);
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  opacity: 0;
-  transition: opacity .35s ease;
+  padding: 48px 16px 16px;
+  background: none;
+  display: flex; flex-direction: row;
+  align-items: center; justify-content: space-between;
+  gap: 8px;
+  transition: background .35s ease, padding .35s ease;
 }
-.specialty-card:hover .specialty-footer { opacity: 1; }
+.specialty-card:hover .specialty-footer {
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.82) 100%);
+  padding-top: 56px;
+}
 
 .specialty-title {
   font-family: var(--font-display);
-  font-size: 13px; font-weight: 400;
+  font-size: 12px; font-weight: 400;
   letter-spacing: .08em;
   color: #ffffff;
-  text-align: center;
+  text-align: left;
+  flex: 1;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
 }
-.specialty-arrow-wrap {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.5);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
+
+.specialty-arrow-wrap { display: none; }
+
 .specialty-arrow {
-  width: 66px; height: 54px;
-  transform: rotate(-90deg);
+  width: 54px; height: 44px;
+  transform: rotate(90deg);
   pointer-events: none;
   display: block;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .3s ease;
 }
+.specialty-card:hover .specialty-arrow { opacity: 1; }
 
 @media (max-width: 900px) {
   .specialty-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 480px) {
-  .specialty-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
-  .specialty-title { font-size: 11px; }
+@media (max-width: 640px) {
+  .specialty-grid { grid-template-columns: repeat(2, 1fr); }
+  .specialty-title { font-size: 10px; }
+  .specialty-arrow { opacity: 1 !important; width: 44px; height: 36px; }
 }
 
 /* ===========================
