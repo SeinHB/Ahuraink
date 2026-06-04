@@ -57,134 +57,137 @@
   <!-- FILTER -->
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterGallery('all')" data-en="All Work" data-tr="Tüm Eserler">All Work</button>
-    <button class="filter-btn" onclick="filterGallery('gothic')" data-en="Gothic" data-tr="Gotik">Gothic</button>
-    <button class="filter-btn" onclick="filterGallery('blackgrey')" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</button>
-    <button class="filter-btn" onclick="filterGallery('neotraditional')" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</button>
-    <button class="filter-btn" onclick="filterGallery('fineline')" data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</button>
+    <button class="filter-btn" onclick="filterGallery('realistic')" data-en="Realistic / Hyper-Realistic" data-tr="Gerçekçi / Hiper-Gerçekçi">Realistic / Hyper-Realistic</button>
+    <button class="filter-btn" onclick="filterGallery('coverup')" data-en="Cover Up" data-tr="Kapatma Dövmesi">Cover Up</button>
+    <button class="filter-btn" onclick="filterGallery('blackgrey')" data-en="Black &amp; Gray" data-tr="Siyah &amp; Gri">Black &amp; Gray</button>
+    <button class="filter-btn" onclick="filterGallery('colorart')" data-en="Color Art" data-tr="Renkli Sanat">Color Art</button>
   </div>
 
   <!-- GALLERY GRID -->
   <section class="gallery-section">
     <div class="gallery-grid" id="galleryGrid">
 
-      <!-- GOTHIC -->
-      <div class="gallery-item" data-cat="gothic" onclick="openLightbox(this)">
+    <!-- REALISTIC -->
+      <div class="gallery-item" data-cat="realistic" onclick="openLightbox(this)">
+        <div class="gallery-thumb blackgrey-1">
+          <div class="thumb-placeholder"><span>👁</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Realistic" data-tr="Gerçekçi">Realistic</span>
+          <span class="gallery-title" data-en="Portrait Study" data-tr="Portre Çalışması">Portrait Study</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--tall" data-cat="realistic" onclick="openLightbox(this)">
+        <div class="gallery-thumb blackgrey-3">
+          <div class="thumb-placeholder"><span>🐺</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Hyper-Realistic" data-tr="Hiper-Gerçekçi">Hyper-Realistic</span>
+          <span class="gallery-title" data-en="Wolf Detail" data-tr="Kurt Detayı">Wolf Detail</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--wide" data-cat="realistic" onclick="openLightbox(this)">
+        <div class="gallery-thumb blackgrey-2">
+          <div class="thumb-placeholder"><span>🦁</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Hyper-Realistic" data-tr="Hiper-Gerçekçi">Hyper-Realistic</span>
+          <span class="gallery-title" data-en="Lion Portrait" data-tr="Aslan Portresi">Lion Portrait</span>
+        </div>
+      </div>
+
+      <!-- COVER UP -->
+      <div class="gallery-item" data-cat="coverup" onclick="openLightbox(this)">
+        <div class="gallery-thumb gothic-2">
+          <div class="thumb-placeholder"><span>🔄</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Cover Up" data-tr="Kapatma">Cover Up</span>
+          <span class="gallery-title" data-en="Dark Rework" data-tr="Karanlık Yenileme">Dark Rework</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--wide" data-cat="coverup" onclick="openLightbox(this)">
+        <div class="gallery-thumb gothic-4">
+          <div class="thumb-placeholder"><span>🌑</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Cover Up" data-tr="Kapatma">Cover Up</span>
+          <span class="gallery-title" data-en="Full Sleeve Rework" data-tr="Tam Kol Yenilemesi">Full Sleeve Rework</span>
+        </div>
+      </div>
+
+      <!-- BLACK & GRAY -->
+      <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
         <div class="gallery-thumb gothic-1">
           <div class="thumb-placeholder"><span>☠</span></div>
         </div>
         <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
+          <span class="gallery-cat" data-en="Black &amp; Gray" data-tr="Siyah &amp; Gri">Black &amp; Gray</span>
           <span class="gallery-title" data-en="Skull & Roses" data-tr="Kafatası & Güller">Skull & Roses</span>
         </div>
       </div>
 
       <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
-        <div class="gallery-thumb blackgrey-1">
-          <div class="thumb-placeholder"><span>🌑</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</span>
-          <span class="gallery-title" data-en="Portrait Study" data-tr="Portre Çalışması">Portrait Study</span>
-        </div>
-      </div>
-
-      <div class="gallery-item gallery-item--wide" data-cat="gothic" onclick="openLightbox(this)">
-        <div class="gallery-thumb gothic-2">
-          <div class="thumb-placeholder"><span>🗡</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
-          <span class="gallery-title" data-en="Dark Cathedral" data-tr="Karanlık Katedral">Dark Cathedral</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-cat="fineline" onclick="openLightbox(this)">
         <div class="gallery-thumb fineline-1">
-          <div class="thumb-placeholder"><span>🕷</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</span>
-          <span class="gallery-title" data-en="Spider Web" data-tr="Örümcek Ağı">Spider Web</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-cat="neotraditional" onclick="openLightbox(this)">
-        <div class="gallery-thumb neo-1">
-          <div class="thumb-placeholder"><span>🐍</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</span>
-          <span class="gallery-title" data-en="Serpent & Dagger" data-tr="Yılan & Hançer">Serpent & Dagger</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
-        <div class="gallery-thumb blackgrey-2">
           <div class="thumb-placeholder"><span>🌿</span></div>
         </div>
         <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</span>
+          <span class="gallery-cat" data-en="Black &amp; Gray" data-tr="Siyah &amp; Gri">Black &amp; Gray</span>
           <span class="gallery-title" data-en="Botanical Dark" data-tr="Botanik Karanlık">Botanical Dark</span>
         </div>
       </div>
 
-      <div class="gallery-item gallery-item--tall" data-cat="gothic" onclick="openLightbox(this)">
+      <div class="gallery-item gallery-item--tall" data-cat="blackgrey" onclick="openLightbox(this)">
         <div class="gallery-thumb gothic-3">
           <div class="thumb-placeholder"><span>🦇</span></div>
         </div>
         <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
+          <span class="gallery-cat" data-en="Black &amp; Gray" data-tr="Siyah &amp; Gri">Black &amp; Gray</span>
           <span class="gallery-title" data-en="Bat & Moon" data-tr="Yarasa & Ay">Bat & Moon</span>
         </div>
       </div>
 
-      <div class="gallery-item" data-cat="fineline" onclick="openLightbox(this)">
-        <div class="gallery-thumb fineline-2">
-          <div class="thumb-placeholder"><span>⚰</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</span>
-          <span class="gallery-title" data-en="Gothic Script" data-tr="Gotik Yazı">Gothic Script</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-cat="neotraditional" onclick="openLightbox(this)">
-        <div class="gallery-thumb neo-2">
-          <div class="thumb-placeholder"><span>🌹</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</span>
-          <span class="gallery-title" data-en="Dark Rose" data-tr="Karanlık Gül">Dark Rose</span>
-        </div>
-      </div>
-
       <div class="gallery-item" data-cat="blackgrey" onclick="openLightbox(this)">
-        <div class="gallery-thumb blackgrey-3">
+        <div class="gallery-thumb fineline-2">
           <div class="thumb-placeholder"><span>🌙</span></div>
         </div>
         <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</span>
+          <span class="gallery-cat" data-en="Black &amp; Gray" data-tr="Siyah &amp; Gri">Black &amp; Gray</span>
           <span class="gallery-title" data-en="Moon Phase" data-tr="Ay Evresi">Moon Phase</span>
         </div>
       </div>
 
-      <div class="gallery-item gallery-item--wide" data-cat="neotraditional" onclick="openLightbox(this)">
+      <!-- COLOR ART -->
+      <div class="gallery-item" data-cat="colorart" onclick="openLightbox(this)">
+        <div class="gallery-thumb neo-1">
+          <div class="thumb-placeholder"><span>🐍</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Color Art" data-tr="Renkli Sanat">Color Art</span>
+          <span class="gallery-title" data-en="Serpent & Dagger" data-tr="Yılan & Hançer">Serpent & Dagger</span>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-cat="colorart" onclick="openLightbox(this)">
+        <div class="gallery-thumb neo-2">
+          <div class="thumb-placeholder"><span>🌹</span></div>
+        </div>
+        <div class="gallery-overlay">
+          <span class="gallery-cat" data-en="Color Art" data-tr="Renkli Sanat">Color Art</span>
+          <span class="gallery-title" data-en="Dark Rose" data-tr="Karanlık Gül">Dark Rose</span>
+        </div>
+      </div>
+
+      <div class="gallery-item gallery-item--wide" data-cat="colorart" onclick="openLightbox(this)">
         <div class="gallery-thumb neo-3">
           <div class="thumb-placeholder"><span>🔱</span></div>
         </div>
         <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</span>
+          <span class="gallery-cat" data-en="Color Art" data-tr="Renkli Sanat">Color Art</span>
           <span class="gallery-title" data-en="Full Sleeve Detail" data-tr="Tam Kol Detayı">Full Sleeve Detail</span>
-        </div>
-      </div>
-
-      <div class="gallery-item" data-cat="gothic" onclick="openLightbox(this)">
-        <div class="gallery-thumb gothic-4">
-          <div class="thumb-placeholder"><span>🕯</span></div>
-        </div>
-        <div class="gallery-overlay">
-          <span class="gallery-cat" data-en="Gothic" data-tr="Gotik">Gothic</span>
-          <span class="gallery-title" data-en="Candle & Bones" data-tr="Mum & Kemikler">Candle & Bones</span>
         </div>
       </div>
 
