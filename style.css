@@ -291,20 +291,20 @@ img { max-width: 100%; display: block; }
    STYLES SECTION — SPECIALTY CARDS
 =========================== */
 .styles-section {
-  padding: 100px 0;
+  padding: 100px 40px;
   background: var(--deep);
   border-top: 1px solid var(--mid);
   border-bottom: 1px solid var(--mid);
 }
 .styles-section .section-header {
-  padding: 0 40px;
+  padding: 0;
   margin-bottom: 40px;
 }
 .specialty-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  width: 100%;
+  gap: 3px;
+  max-width: 1200px; margin: 0 auto;
 }
 .specialty-card {
   position: relative;
@@ -333,40 +333,34 @@ img { max-width: 100%; display: block; }
 
 .specialty-footer {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 48px 16px 16px;
-  background: none;
-  display: flex; flex-direction: row;
-  align-items: center; justify-content: space-between;
-  gap: 8px;
-  transition: background .35s ease, padding .35s ease;
-}
-.specialty-card:hover .specialty-footer {
+  padding: 56px 16px 18px;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.82) 100%);
-  padding-top: 56px;
+  display: flex; align-items: flex-end; justify-content: center;
 }
+.specialty-footer::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .35s ease;
+}
+.specialty-card:hover .specialty-footer::after { transform: scaleX(1); }
 
 .specialty-title {
   font-family: var(--font-display);
   font-size: 12px; font-weight: 400;
   letter-spacing: .08em;
   color: #ffffff;
-  text-align: left;
-  flex: 1;
+  text-align: center;
   text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+  transition: color .3s ease;
 }
+.specialty-card:hover .specialty-title { color: var(--red); }
 
 .specialty-arrow-wrap { display: none; }
-
-.specialty-arrow {
-  width: 54px; height: 44px;
-  transform: rotate(90deg);
-  pointer-events: none;
-  display: block;
-  flex-shrink: 0;
-  opacity: 0;
-  transition: opacity .3s ease;
-}
-.specialty-card:hover .specialty-arrow { opacity: 1; }
+.specialty-arrow { display: none; }
 
 @media (max-width: 900px) {
   .specialty-grid { grid-template-columns: repeat(2, 1fr); }
@@ -374,7 +368,6 @@ img { max-width: 100%; display: block; }
 @media (max-width: 640px) {
   .specialty-grid { grid-template-columns: repeat(2, 1fr); }
   .specialty-title { font-size: 10px; }
-  .specialty-arrow { opacity: 1 !important; width: 44px; height: 36px; }
 }
 
 /* ===========================
