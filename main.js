@@ -78,7 +78,7 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll(
-  '.style-card, .about-text, .about-visual, .process-step, .contact-info, .contact-form-wrap'
+  '.specialty-card, .about-text, .about-visual, .process-step, .contact-info, .contact-form-wrap'
 ).forEach(el => {
   el.classList.add('reveal');
   revealObserver.observe(el);
