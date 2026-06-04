@@ -186,13 +186,28 @@ img { max-width: 100%; display: block; }
 .hero {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
-  background: radial-gradient(ellipse at center top, #120e00 0%, var(--black) 60%);
+  background: var(--black);
 }
-.hero-bg { position: absolute; inset: 0; }
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('Hero_BG.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.30;
+  z-index: 0;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center top, rgba(18,14,0,0.6) 0%, rgba(10,10,10,0.85) 70%);
+  z-index: 1;
+}
 .skull-deco {
   position: absolute; font-size: 300px; opacity: 0.03;
   pointer-events: none; user-select: none;
   animation: float 8s ease-in-out infinite;
+  z-index: 2;
 }
 .skull-1 { top: -80px; left: -80px; animation-delay: 0s; }
 .skull-2 { bottom: -80px; right: -80px; animation-delay: 4s; }
