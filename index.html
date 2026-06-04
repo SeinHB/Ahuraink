@@ -71,27 +71,108 @@
       <h2 data-en="OUR SPECIALTIES" data-tr="UZMANLIKLARIMIZ">OUR SPECIALTIES</h2>
       <div class="section-line"></div>
     </div>
-    <div class="styles-grid">
-      <div class="style-card" style="animation-delay:.1s">
-        <div class="style-icon">⚔</div>
-        <h3 data-en="Gothic & Dark" data-tr="Gotik & Karanlık">Gothic & Dark</h3>
-        <p data-en="Skulls, demons, shadows, darkness. The art of the underworld brought to life on your skin." data-tr="Kafatasları, iblisler, gölgeler, karanlık. Yeraltı dünyasının sanatı derinize hayat buluyor.">Skulls, demons, shadows, darkness. The art of the underworld brought to life on your skin.</p>
+    <div class="specialty-grid">
+
+      <div class="specialty-card reveal" style="animation-delay:.1s" data-filter="realistic" onclick="goToPortfolio('realistic')">
+        <div class="specialty-img-wrap">
+          <div class="specialty-img" style="background-image: url('specialty-realistic.jpg');"></div>
+        </div>
+        <div class="specialty-footer">
+          <h3 class="specialty-title" data-en="Realistic / Hyper-Realistic" data-tr="Gerçekçi / Hiper-Gerçekçi">Realistic / Hyper-Realistic</h3>
+        </div>
+        <svg class="specialty-arrow" viewBox="0 0 180 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#sa1)">
+            <path d="M107.507 60C107.683 60 107.851 60.0786 107.965 60.2133C111.539 64.426 115.443 67.6621 119.678 69.9215C119.875 70.0267 120 70.2318 120 70.456V73.6259C120 73.8547 119.87 74.0632 119.667 74.1665C115.436 76.3137 111.536 79.5196 107.965 83.7836C107.851 83.9201 107.682 84 107.505 84H101.737C101.318 84 101.029 83.5789 101.187 83.1894C101.699 81.9224 102.251 80.7381 102.845 79.6365C103.421 78.5189 104.055 77.4594 104.746 76.4585C104.986 76.1114 104.818 75.6236 104.407 75.5328C103.631 75.3615 102.724 75.2286 101.597 75.2227L82.3589 75.0123C75.0893 74.9261 69.7394 75.699 66.3095 77.3314C64.9115 77.995 63.7917 78.8085 62.9501 79.7713C62.1087 80.7341 61.5276 81.5916 61.2074 82.3441C60.91 83.0432 60.8299 83.4279 60.6086 83.5021C60.5537 83.5206 60.4944 83.507 60.4389 83.4903C60.2011 83.419 60.0308 83.2071 60.0186 82.9583C59.8369 79.2397 60.9851 77.056 63.4627 74.2523C66.1511 71.1482 69.9457 69.0821 74.8462 68.0537C77.4574 67.4996 80.3072 67.2732 83.3952 67.3746L87.9158 67.534L90.1804 67.6682L100.027 67.9998C100.52 68.0255 101.192 68.0537 102.042 68.0848C102.923 68.1284 103.536 68.1682 103.881 68.2037L104.08 68.2048C104.564 68.2076 104.852 67.6614 104.589 67.2542C104.006 66.3527 103.455 65.4193 102.935 64.4543C102.341 63.302 101.788 62.0875 101.276 60.811C101.119 60.421 101.408 60 101.827 60H107.507Z" fill="#EBB40F"/>
+          </g>
+          <defs>
+            <filter id="sa1" x="0" y="0" width="180" height="144" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+              <feOffset/><feGaussianBlur stdDeviation="30"/>
+              <feComposite in2="hardAlpha" operator="out"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0.922 0 0 0 0 0.706 0 0 0 0 0.059 0 0 0 0.35 0"/>
+              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+            </filter>
+          </defs>
+        </svg>
       </div>
-      <div class="style-card" style="animation-delay:.2s">
-        <div class="style-icon">🌹</div>
-        <h3 data-en="Black & Grey" data-tr="Siyah & Gri">Black & Grey</h3>
-        <p data-en="Hyper-realistic portraits and detailed fine-art pieces rendered in timeless monochrome." data-tr="Hiper-gerçekçi portreler ve ayrıntılı güzel sanat eserleri zamansız monokromda işleniyor.">Hyper-realistic portraits and detailed fine-art pieces rendered in timeless monochrome.</p>
+
+      <div class="specialty-card reveal" style="animation-delay:.2s" data-filter="coverup" onclick="goToPortfolio('coverup')">
+        <div class="specialty-img-wrap">
+          <div class="specialty-img" style="background-image: url('specialty-coverup.jpg');"></div>
+        </div>
+        <div class="specialty-footer">
+          <h3 class="specialty-title" data-en="Cover Up" data-tr="Kapatma Dövmesi">Cover Up</h3>
+        </div>
+        <svg class="specialty-arrow" viewBox="0 0 180 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#sa2)">
+            <path d="M107.507 60C107.683 60 107.851 60.0786 107.965 60.2133C111.539 64.426 115.443 67.6621 119.678 69.9215C119.875 70.0267 120 70.2318 120 70.456V73.6259C120 73.8547 119.87 74.0632 119.667 74.1665C115.436 76.3137 111.536 79.5196 107.965 83.7836C107.851 83.9201 107.682 84 107.505 84H101.737C101.318 84 101.029 83.5789 101.187 83.1894C101.699 81.9224 102.251 80.7381 102.845 79.6365C103.421 78.5189 104.055 77.4594 104.746 76.4585C104.986 76.1114 104.818 75.6236 104.407 75.5328C103.631 75.3615 102.724 75.2286 101.597 75.2227L82.3589 75.0123C75.0893 74.9261 69.7394 75.699 66.3095 77.3314C64.9115 77.995 63.7917 78.8085 62.9501 79.7713C62.1087 80.7341 61.5276 81.5916 61.2074 82.3441C60.91 83.0432 60.8299 83.4279 60.6086 83.5021C60.5537 83.5206 60.4944 83.507 60.4389 83.4903C60.2011 83.419 60.0308 83.2071 60.0186 82.9583C59.8369 79.2397 60.9851 77.056 63.4627 74.2523C66.1511 71.1482 69.9457 69.0821 74.8462 68.0537C77.4574 67.4996 80.3072 67.2732 83.3952 67.3746L87.9158 67.534L90.1804 67.6682L100.027 67.9998C100.52 68.0255 101.192 68.0537 102.042 68.0848C102.923 68.1284 103.536 68.1682 103.881 68.2037L104.08 68.2048C104.564 68.2076 104.852 67.6614 104.589 67.2542C104.006 66.3527 103.455 65.4193 102.935 64.4543C102.341 63.302 101.788 62.0875 101.276 60.811C101.119 60.421 101.408 60 101.827 60H107.507Z" fill="#EBB40F"/>
+          </g>
+          <defs>
+            <filter id="sa2" x="0" y="0" width="180" height="144" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+              <feOffset/><feGaussianBlur stdDeviation="30"/>
+              <feComposite in2="hardAlpha" operator="out"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0.922 0 0 0 0 0.706 0 0 0 0 0.059 0 0 0 0.35 0"/>
+              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+            </filter>
+          </defs>
+        </svg>
       </div>
-      <div class="style-card" style="animation-delay:.3s">
-        <div class="style-icon">🔱</div>
-        <h3 data-en="Neo-Traditional" data-tr="Neo-Geleneksel">Neo-Traditional</h3>
-        <p data-en="Bold lines and rich color with a dark twist — classic art reborn for the modern rebel." data-tr="Karanlık bir dokunuşla kalın çizgiler ve zengin renkler — klasik sanat modern isyan için yeniden doğuyor.">Bold lines and rich color with a dark twist — classic art reborn for the modern rebel.</p>
+
+      <div class="specialty-card reveal" style="animation-delay:.3s" data-filter="blackgrey" onclick="goToPortfolio('blackgrey')">
+        <div class="specialty-img-wrap">
+          <div class="specialty-img" style="background-image: url('specialty-blackgrey.jpg');"></div>
+        </div>
+        <div class="specialty-footer">
+          <h3 class="specialty-title" data-en="Black &amp; Gray" data-tr="Siyah &amp; Gri">Black &amp; Gray</h3>
+        </div>
+        <svg class="specialty-arrow" viewBox="0 0 180 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#sa3)">
+            <path d="M107.507 60C107.683 60 107.851 60.0786 107.965 60.2133C111.539 64.426 115.443 67.6621 119.678 69.9215C119.875 70.0267 120 70.2318 120 70.456V73.6259C120 73.8547 119.87 74.0632 119.667 74.1665C115.436 76.3137 111.536 79.5196 107.965 83.7836C107.851 83.9201 107.682 84 107.505 84H101.737C101.318 84 101.029 83.5789 101.187 83.1894C101.699 81.9224 102.251 80.7381 102.845 79.6365C103.421 78.5189 104.055 77.4594 104.746 76.4585C104.986 76.1114 104.818 75.6236 104.407 75.5328C103.631 75.3615 102.724 75.2286 101.597 75.2227L82.3589 75.0123C75.0893 74.9261 69.7394 75.699 66.3095 77.3314C64.9115 77.995 63.7917 78.8085 62.9501 79.7713C62.1087 80.7341 61.5276 81.5916 61.2074 82.3441C60.91 83.0432 60.8299 83.4279 60.6086 83.5021C60.5537 83.5206 60.4944 83.507 60.4389 83.4903C60.2011 83.419 60.0308 83.2071 60.0186 82.9583C59.8369 79.2397 60.9851 77.056 63.4627 74.2523C66.1511 71.1482 69.9457 69.0821 74.8462 68.0537C77.4574 67.4996 80.3072 67.2732 83.3952 67.3746L87.9158 67.534L90.1804 67.6682L100.027 67.9998C100.52 68.0255 101.192 68.0537 102.042 68.0848C102.923 68.1284 103.536 68.1682 103.881 68.2037L104.08 68.2048C104.564 68.2076 104.852 67.6614 104.589 67.2542C104.006 66.3527 103.455 65.4193 102.935 64.4543C102.341 63.302 101.788 62.0875 101.276 60.811C101.119 60.421 101.408 60 101.827 60H107.507Z" fill="#EBB40F"/>
+          </g>
+          <defs>
+            <filter id="sa3" x="0" y="0" width="180" height="144" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+              <feOffset/><feGaussianBlur stdDeviation="30"/>
+              <feComposite in2="hardAlpha" operator="out"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0.922 0 0 0 0 0.706 0 0 0 0 0.059 0 0 0 0.35 0"/>
+              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+            </filter>
+          </defs>
+        </svg>
       </div>
-      <div class="style-card" style="animation-delay:.4s">
-        <div class="style-icon">🕯</div>
-        <h3 data-en="Fine Line" data-tr="İnce Çizgi">Fine Line</h3>
-        <p data-en="Delicate, precise, surgical. Dark motifs rendered with razor-thin lines for a premium look." data-tr="Narin, hassas, cerrahi. Karanlık motifler jilet gibi ince çizgilerle premium bir görünüm için işleniyor.">Delicate, precise, surgical. Dark motifs rendered with razor-thin lines for a premium look.</p>
+
+      <div class="specialty-card reveal" style="animation-delay:.4s" data-filter="colorart" onclick="goToPortfolio('colorart')">
+        <div class="specialty-img-wrap">
+          <div class="specialty-img" style="background-image: url('specialty-colorart.jpg');"></div>
+        </div>
+        <div class="specialty-footer">
+          <h3 class="specialty-title" data-en="Color Art" data-tr="Renkli Sanat">Color Art</h3>
+        </div>
+        <svg class="specialty-arrow" viewBox="0 0 180 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#sa4)">
+            <path d="M107.507 60C107.683 60 107.851 60.0786 107.965 60.2133C111.539 64.426 115.443 67.6621 119.678 69.9215C119.875 70.0267 120 70.2318 120 70.456V73.6259C120 73.8547 119.87 74.0632 119.667 74.1665C115.436 76.3137 111.536 79.5196 107.965 83.7836C107.851 83.9201 107.682 84 107.505 84H101.737C101.318 84 101.029 83.5789 101.187 83.1894C101.699 81.9224 102.251 80.7381 102.845 79.6365C103.421 78.5189 104.055 77.4594 104.746 76.4585C104.986 76.1114 104.818 75.6236 104.407 75.5328C103.631 75.3615 102.724 75.2286 101.597 75.2227L82.3589 75.0123C75.0893 74.9261 69.7394 75.699 66.3095 77.3314C64.9115 77.995 63.7917 78.8085 62.9501 79.7713C62.1087 80.7341 61.5276 81.5916 61.2074 82.3441C60.91 83.0432 60.8299 83.4279 60.6086 83.5021C60.5537 83.5206 60.4944 83.507 60.4389 83.4903C60.2011 83.419 60.0308 83.2071 60.0186 82.9583C59.8369 79.2397 60.9851 77.056 63.4627 74.2523C66.1511 71.1482 69.9457 69.0821 74.8462 68.0537C77.4574 67.4996 80.3072 67.2732 83.3952 67.3746L87.9158 67.534L90.1804 67.6682L100.027 67.9998C100.52 68.0255 101.192 68.0537 102.042 68.0848C102.923 68.1284 103.536 68.1682 103.881 68.2037L104.08 68.2048C104.564 68.2076 104.852 67.6614 104.589 67.2542C104.006 66.3527 103.455 65.4193 102.935 64.4543C102.341 63.302 101.788 62.0875 101.276 60.811C101.119 60.421 101.408 60 101.827 60H107.507Z" fill="#EBB40F"/>
+          </g>
+          <defs>
+            <filter id="sa4" x="0" y="0" width="180" height="144" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+              <feOffset/><feGaussianBlur stdDeviation="30"/>
+              <feComposite in2="hardAlpha" operator="out"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0.922 0 0 0 0 0.706 0 0 0 0 0.059 0 0 0 0.35 0"/>
+              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+            </filter>
+          </defs>
+        </svg>
       </div>
+
     </div>
   </section>
 
