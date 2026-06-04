@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — AHURA INK</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="ink-cursor">
+    <svg viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">
+      <path id="ink-path" d="M14 2 C14 2 24 12 24 22 C24 29 19.5 34 14 34 C8.5 34 4 29 4 22 C4 12 14 2 14 2 Z"/>
+    </svg>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">AHURA INK</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-en="Home" data-tr="Ana Sayfa">Home</a>
+      <a href="portfolio.html" class="nav-link" data-en="Our Work" data-tr="Eserlerimiz">Our Work</a>
+      <a href="about.html" class="nav-link active" data-en="About Us" data-tr="Hakkımızda">About Us</a>
+      <a href="index.html#contact" class="nav-link" data-en="Contact" data-tr="İletişim">Contact</a>
+    </div>
+    <div class="nav-right">
+      <span class="lang-label">EN</span>
+      <label class="lang-switch">
+        <input type="checkbox" id="langToggle" onchange="toggleLang(this)">
+        <span class="lang-slider"></span>
+      </label>
+      <span class="lang-label">TR</span>
+    </div>
+    <div class="nav-mobile-right">
+      <button class="mobile-lang-btn" id="mobileLangBtn" onclick="toggleMobileLangBtn()">TR</button>
+      <button class="burger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="toggleMenu()" data-en="Home" data-tr="Ana Sayfa">Home</a>
+    <a href="portfolio.html" onclick="toggleMenu()" data-en="Our Work" data-tr="Eserlerimiz">Our Work</a>
+    <a href="about.html" onclick="toggleMenu()" data-en="About Us" data-tr="Hakkımızda">About Us</a>
+    <a href="index.html#contact" onclick="toggleMenu()" data-en="Contact" data-tr="İletişim">Contact</a>
+  </div>
+
+  <!-- COMING SOON -->
+  <section style="min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px;">
+    <div>
+      <p style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .3em; color: var(--muted); margin-bottom: 24px;">— COMING SOON —</p>
+      <h1 style="font-family: var(--font-display); font-size: clamp(32px, 6vw, 64px); color: var(--text); margin-bottom: 20px;">Meet Our Team</h1>
+      <p style="font-family: var(--font-body); font-style: italic; font-size: 20px; color: var(--text-dim);">Five artists. Five stories. One studio.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">Ahura INK STUDIO</div>
+      <p class="footer-copy" data-en="© 2025 Ahura Ink Studio. All rights reserved." data-tr="© 2025 Ahura Ink Studio. Tüm hakları saklıdır.">© 2025 Ahura Ink Studio. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html" data-en="Home" data-tr="Ana Sayfa">Home</a>
+        <a href="portfolio.html" data-en="Portfolio" data-tr="Portfolyo">Portfolio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
