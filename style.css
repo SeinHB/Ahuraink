@@ -331,25 +331,32 @@ img { max-width: 100%; display: block; }
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 56px 16px 18px;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.82) 100%);
-  display: flex; justify-content: center; align-items: flex-end;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: 0;
+  transition: opacity .35s ease;
 }
+.specialty-card:hover .specialty-footer { opacity: 1; }
+
 .specialty-title {
   font-family: var(--font-display);
   font-size: 13px; font-weight: 400;
   letter-spacing: .08em;
-  color: var(--black);
+  color: #ffffff;
   text-align: center;
 }
-.specialty-arrow {
-  position: absolute;
-  top: 12px; right: 12px;
-  width: 66px; height: 54px;
-  opacity: 0;
-  transform: rotate(-45deg);
-  transition: opacity .3s ease;
-  pointer-events: none;
+.specialty-arrow-wrap {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.specialty-card:hover .specialty-arrow { opacity: 1; }
+.specialty-arrow {
+  width: 66px; height: 54px;
+  transform: rotate(-90deg);
+  pointer-events: none;
+  display: block;
+}
 
 @media (max-width: 900px) {
   .specialty-grid { grid-template-columns: repeat(2, 1fr); }
