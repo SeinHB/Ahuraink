@@ -723,12 +723,8 @@ img { max-width: 100%; display: block; }
   .stat-num { font-size: 28px; }
 
   .hero-line-top {
-    position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-    z-index: 99;
+    position: relative;
+    margin: 0 auto 20px;
   }
 }
 
