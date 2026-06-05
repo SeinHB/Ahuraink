@@ -145,10 +145,50 @@ function submitForm(e) {
   setTimeout(() => msg.classList.remove('visible'), 4000);
 }
 
+// ── Stat counter animation ───────────────────
+function animateCounters() {
+  const stats = document.querySelectorAll('.stat-num[data-target]');
+  if (!stats.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.getAttribute('data-target'));
+      const isPlus = target === 2000; // show "+" suffix for tattoos
+      const duration = 1800;
+      const steps = 60;
+      const increment = target / steps;
+      let current = 0;
+      let step = 0;
+
+      const timer = setInterval(() => {
+        step++;
+        // ease-out: slow down near the end
+        const progress = step / steps;
+        const eased = 1 - Math.pow(1 - progress, 3);
+        current = Math.round(eased * target);
+
+        el.textContent = current + (isPlus && step >= steps ? '+' : '');
+
+        if (step >= steps) {
+          el.textContent = target + (isPlus ? '+' : '');
+          clearInterval(timer);
+        }
+      }, duration / steps);
+
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+
+  stats.forEach(el => observer.observe(el));
+}
+
 // ── Init ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(currentLang);
   applyFilterFromURL();
+  animateCounters();
 });
 
 // ── Ink Cursor ────────────────────────────────
