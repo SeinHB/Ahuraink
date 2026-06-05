@@ -507,13 +507,24 @@ img { max-width: 100%; display: block; }
     background: linear-gradient(to right, transparent 0%, #888880 50%, transparent 100%);
     margin: 0;
   }
-  .step-svg { height: 64px; }
+  .step-svg {
+    height: 64px;
+    width: 80px;
+    object-fit: contain;
+    object-position: center;
+    flex-shrink: 0;
+  }
 }
 @media (max-width: 640px) {
   .process-section { padding: 60px 20px; }
   .process-header { margin-bottom: 36px; }
   .process-header h2 { font-size: 18px; letter-spacing: 3px; }
-  .step-svg { height: 56px; }
+  .step-svg {
+    height: 56px;
+    width: 80px;
+    object-fit: contain;
+    object-position: center;
+  }
 }
 
 /* ===========================
