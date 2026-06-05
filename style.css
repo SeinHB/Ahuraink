@@ -374,16 +374,17 @@ img { max-width: 100%; display: block; }
    ABOUT SECTION
 =========================== */
 .about-section {
-  padding: 100px 0 100px 40px;
+  padding: 100px 0 100px 0;
   overflow: hidden;
 }
 .about-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 0; align-items: stretch;
-  max-width: calc(50vw + 600px);
+  width: 100%;
 }
 .about-text {
-  padding-right: 60px;
+  padding: 0 60px 0 40px;
+  max-width: 50vw;
 }
 .about-text h2 {
   font-family: var(--font-display); font-size: clamp(24px, 3.5vw, 38px);
@@ -793,13 +794,16 @@ img { max-width: 100%; display: block; }
   .about-visual { display: none; }
   .about-photo--mobile {
     display: block;
-    width: 100%; aspect-ratio: 16/9;
-    margin: 24px 0;
+    width: 100vw;
+    margin-left: -24px;
+    margin-right: 0;
+    margin-top: 24px;
+    margin-bottom: 24px;
     overflow: hidden;
   }
   .about-photo--mobile img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center;
+    width: 100%;
+    height: auto;
     display: block;
   }
   .about-stats--mobile {
