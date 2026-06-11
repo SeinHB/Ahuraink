@@ -321,6 +321,45 @@ function renderFileList() {
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRI-d1Ng_r7Hu9qjJinNeY8Yeo5Amp1Gty3FfLw8zTU9zCbCUJKGygx5t0WAtERVFz/exec';
 
+// ── Form popup ────────────────────────────────
+function showFormPopup(type, name) {
+  const overlay = document.getElementById('formPopupOverlay');
+  const icon    = document.getElementById('formPopupIcon');
+  const title   = document.getElementById('formPopupTitle');
+  const desc    = document.getElementById('formPopupDesc');
+  const isTr    = currentLang === 'tr';
+
+  if (type === 'success') {
+    icon.textContent  = '✦';
+    title.textContent = isTr ? 'Mesaj Alındı' : 'Message Received';
+    title.className   = 'form-popup-title success';
+    const nameSpan    = `<span class="popup-name">${name}</span>`;
+    desc.innerHTML    = isTr
+      ? `${nameSpan}, bize ulaştığın için teşekkürler. En kısa sürede seninle iletişime geçeceğiz.`
+      : `Thanks for reaching us, ${nameSpan}. We will contact you soon.`;
+  } else {
+    icon.textContent  = '✕';
+    title.textContent = isTr ? 'Gönderilemedi' : 'Failed to Send';
+    title.className   = 'form-popup-title error';
+    desc.textContent  = isTr
+      ? 'Bir şeyler yanlış gitti. Lütfen tekrar deneyin.'
+      : 'Something went wrong. Please try again.';
+  }
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFormPopup() {
+  const overlay = document.getElementById('formPopupOverlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeFormPopup();
+});
+
 async function submitForm(e) {
   e.preventDefault();
   let valid = true;
@@ -413,20 +452,19 @@ async function submitForm(e) {
     const result = await response.json();
 
     if (result.result === 'success') {
-      const msg = document.getElementById('formSuccess');
-      msg.classList.add('visible');
+      const senderName = nameField.value.trim();
       attachedFiles = [];
       renderFileList();
       e.target.reset();
       switchContact('phone');
-      setTimeout(() => msg.classList.remove('visible'), 5000);
+      showFormPopup('success', senderName);
     } else {
-      alert('Something went wrong. Please try again or contact us directly.');
+      showFormPopup('error');
       console.error('Script error:', result.error);
     }
 
   } catch (err) {
-    alert('Connection error. Please check your internet and try again.');
+    showFormPopup('error');
     console.error('Fetch error:', err);
   } finally {
     submitBtn.textContent = originalText;
