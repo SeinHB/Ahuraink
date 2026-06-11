@@ -353,7 +353,6 @@
             </div>
           </div>
           <button type="submit" class="btn-primary" data-en="Send Message" data-tr="Mesaj Gönder">Send Message</button>
-          <p class="form-success" id="formSuccess" data-en="✔ Message sent! We'll contact you soon." data-tr="✔ Mesaj gönderildi! Yakında sizi arayacağız.">✔ Message sent! We'll contact you soon.</p>
         </form>
       </div>
     </div>
@@ -381,6 +380,16 @@
       </div>
     </div>
   </footer>
+
+  <!-- FORM POPUP -->
+  <div class="form-popup-overlay" id="formPopupOverlay" onclick="closeFormPopup()">
+    <div class="form-popup" id="formPopup" onclick="event.stopPropagation()">
+      <button class="form-popup-close" onclick="closeFormPopup()">✕</button>
+      <div class="form-popup-icon" id="formPopupIcon"></div>
+      <h3 class="form-popup-title" id="formPopupTitle"></h3>
+      <p class="form-popup-desc" id="formPopupDesc"></p>
+    </div>
+  </div>
 
   <script src="main.js"></script>
 </body>
