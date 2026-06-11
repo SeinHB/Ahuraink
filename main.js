@@ -136,12 +136,178 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
 });
 
-// ── Contact form ──────────────────────────────
+// ── Contact form — email/phone toggle ────────
+function switchContact(mode) {
+  const emailField = document.getElementById('fieldEmail');
+  const phoneWrap  = document.getElementById('phoneWrap');
+  const btnEmail   = document.getElementById('btnEmail');
+  const btnPhone   = document.getElementById('btnPhone');
+  if (!emailField) return;
+  if (mode === 'email') {
+    emailField.style.display = '';
+    phoneWrap.style.display  = 'none';
+    btnEmail.classList.add('active');
+    btnPhone.classList.remove('active');
+    emailField.required = true;
+    document.getElementById('fieldPhone').required = false;
+  } else {
+    emailField.style.display = 'none';
+    phoneWrap.style.display  = 'flex';
+    btnEmail.classList.remove('active');
+    btnPhone.classList.add('active');
+    emailField.required = false;
+    document.getElementById('fieldPhone').required = true;
+  }
+}
+
+// ── Country dropdown ──────────────────────────
+const COUNTRIES = [
+  { code: 'TR', dial: '+90',  name: 'Turkey' },
+  { code: 'US', dial: '+1',   name: 'United States' },
+  { code: 'GB', dial: '+44',  name: 'United Kingdom' },
+  { code: 'DE', dial: '+49',  name: 'Germany' },
+  { code: 'FR', dial: '+33',  name: 'France' },
+  { code: 'IT', dial: '+39',  name: 'Italy' },
+  { code: 'ES', dial: '+34',  name: 'Spain' },
+  { code: 'NL', dial: '+31',  name: 'Netherlands' },
+  { code: 'RU', dial: '+7',   name: 'Russia' },
+  { code: 'SA', dial: '+966', name: 'Saudi Arabia' },
+  { code: 'AE', dial: '+971', name: 'UAE' },
+  { code: 'IR', dial: '+98',  name: 'Iran' },
+  { code: 'GR', dial: '+30',  name: 'Greece' },
+  { code: 'AU', dial: '+61',  name: 'Australia' },
+  { code: 'CA', dial: '+1',   name: 'Canada' },
+  { code: 'JP', dial: '+81',  name: 'Japan' },
+  { code: 'KR', dial: '+82',  name: 'South Korea' },
+  { code: 'CN', dial: '+86',  name: 'China' },
+  { code: 'IN', dial: '+91',  name: 'India' },
+  { code: 'BR', dial: '+55',  name: 'Brazil' },
+  { code: 'MX', dial: '+52',  name: 'Mexico' },
+  { code: 'ZA', dial: '+27',  name: 'South Africa' },
+  { code: 'NG', dial: '+234', name: 'Nigeria' },
+  { code: 'EG', dial: '+20',  name: 'Egypt' },
+  { code: 'PL', dial: '+48',  name: 'Poland' },
+  { code: 'SE', dial: '+46',  name: 'Sweden' },
+  { code: 'NO', dial: '+47',  name: 'Norway' },
+  { code: 'CH', dial: '+41',  name: 'Switzerland' },
+  { code: 'AT', dial: '+43',  name: 'Austria' },
+  { code: 'BE', dial: '+32',  name: 'Belgium' },
+  { code: 'PT', dial: '+351', name: 'Portugal' },
+  { code: 'UA', dial: '+380', name: 'Ukraine' },
+  { code: 'RO', dial: '+40',  name: 'Romania' },
+  { code: 'BG', dial: '+359', name: 'Bulgaria' },
+  { code: 'HU', dial: '+36',  name: 'Hungary' },
+  { code: 'CZ', dial: '+420', name: 'Czech Republic' },
+  { code: 'SK', dial: '+421', name: 'Slovakia' },
+  { code: 'HR', dial: '+385', name: 'Croatia' },
+  { code: 'RS', dial: '+381', name: 'Serbia' },
+  { code: 'GE', dial: '+995', name: 'Georgia' },
+  { code: 'AZ', dial: '+994', name: 'Azerbaijan' },
+  { code: 'AM', dial: '+374', name: 'Armenia' },
+  { code: 'IQ', dial: '+964', name: 'Iraq' },
+  { code: 'SY', dial: '+963', name: 'Syria' },
+  { code: 'LB', dial: '+961', name: 'Lebanon' },
+  { code: 'JO', dial: '+962', name: 'Jordan' },
+  { code: 'KW', dial: '+965', name: 'Kuwait' },
+  { code: 'QA', dial: '+974', name: 'Qatar' },
+  { code: 'BH', dial: '+973', name: 'Bahrain' },
+  { code: 'OM', dial: '+968', name: 'Oman' },
+];
+
+let selectedDial = '+90';
+let selectedCountryCode = 'TR';
+
+function renderCountryList(filter = '') {
+  const list = document.getElementById('countryList');
+  if (!list) return;
+  const filtered = filter
+    ? COUNTRIES.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()) || c.dial.includes(filter))
+    : COUNTRIES;
+  list.innerHTML = filtered.map(c => `
+    <div class="country-option" onclick="selectCountry('${c.code}','${c.dial}','${c.name}')">
+      <img class="flag-img" src="https://flagcdn.com/w40/${c.code.toLowerCase()}.png" alt="${c.code}" />
+      <span>${c.name}</span>
+      <span style="margin-left:auto;color:var(--muted)">${c.dial}</span>
+    </div>`).join('');
+}
+
+function toggleCountryDropdown() {
+  const dd = document.getElementById('countryDropdown');
+  if (!dd) return;
+  const open = dd.style.display === 'none' || !dd.style.display;
+  dd.style.display = open ? 'flex' : 'none';
+  dd.style.flexDirection = 'column';
+  if (open) { renderCountryList(); document.getElementById('countrySearch').focus(); }
+}
+
+function filterCountries(val) { renderCountryList(val); }
+
+function selectCountry(code, dial, name) {
+  selectedDial = dial; selectedCountryCode = code;
+  document.getElementById('selectedFlag').src = `https://flagcdn.com/w40/${code.toLowerCase()}.png`;
+  document.getElementById('selectedFlag').alt = code;
+  document.getElementById('selectedCode').textContent = dial;
+  document.getElementById('countryDropdown').style.display = 'none';
+}
+
+document.addEventListener('click', e => {
+  const dd = document.getElementById('countryDropdown');
+  const btn = document.getElementById('countryBtn');
+  if (dd && btn && !dd.contains(e.target) && !btn.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
+
+// ── File attachment ────────────────────────────
+let attachedFiles = [];
+
+function handleFiles(input) {
+  const allowed = ['image/jpeg', 'image/png', 'application/pdf'];
+  const newFiles = Array.from(input.files);
+  const remaining = 3 - attachedFiles.length;
+  let added = 0;
+
+  for (const f of newFiles) {
+    if (attachedFiles.length >= 3) break;
+    if (!allowed.includes(f.type)) continue;
+    attachedFiles.push(f);
+    added++;
+  }
+
+  input.value = '';
+  renderFileList();
+
+  if (attachedFiles.length >= 3) {
+    document.querySelector('.attach-btn').style.opacity = '0.4';
+    document.querySelector('.attach-btn').style.pointerEvents = 'none';
+  }
+}
+
+function removeFile(i) {
+  attachedFiles.splice(i, 1);
+  renderFileList();
+  document.querySelector('.attach-btn').style.opacity = '';
+  document.querySelector('.attach-btn').style.pointerEvents = '';
+}
+
+function renderFileList() {
+  const list = document.getElementById('fileList');
+  if (!list) return;
+  list.innerHTML = attachedFiles.map((f, i) => `
+    <div class="file-item">
+      <span>${f.name}</span>
+      <button type="button" class="file-remove" onclick="removeFile(${i})">✕</button>
+    </div>`).join('');
+}
+
 function submitForm(e) {
   e.preventDefault();
   const msg = document.getElementById('formSuccess');
   msg.classList.add('visible');
+  attachedFiles = [];
+  renderFileList();
   e.target.reset();
+  switchContact('email');
   setTimeout(() => msg.classList.remove('visible'), 4000);
 }
 
