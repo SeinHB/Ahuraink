@@ -142,7 +142,13 @@ function switchContact(mode) {
   const phoneWrap  = document.getElementById('phoneWrap');
   const btnEmail   = document.getElementById('btnEmail');
   const btnPhone   = document.getElementById('btnPhone');
+  const errEmail   = document.getElementById('errorEmail');
+  const errPhone   = document.getElementById('errorPhone');
   if (!emailField) return;
+  // clear errors on switch
+  [emailField, document.getElementById('fieldPhone')].forEach(f => f && f.classList.remove('error'));
+  [errEmail, errPhone].forEach(e => e && e.classList.remove('visible'));
+
   if (mode === 'email') {
     emailField.style.display = '';
     phoneWrap.style.display  = 'none';
@@ -153,11 +159,24 @@ function switchContact(mode) {
   } else {
     emailField.style.display = 'none';
     phoneWrap.style.display  = 'flex';
-    btnEmail.classList.remove('active');
     btnPhone.classList.add('active');
+    btnEmail.classList.remove('active');
     emailField.required = false;
     document.getElementById('fieldPhone').required = true;
   }
+}
+
+// ── Phone formatter & validator ───────────────
+function formatPhone(input) {
+  // strip all non-digits
+  let digits = input.value.replace(/\D/g, '').slice(0, 10);
+  // format as "000 000 00 00"
+  let formatted = '';
+  if (digits.length > 0) formatted = digits.slice(0, 3);
+  if (digits.length > 3) formatted += ' ' + digits.slice(3, 6);
+  if (digits.length > 6) formatted += ' ' + digits.slice(6, 8);
+  if (digits.length > 8) formatted += ' ' + digits.slice(8, 10);
+  input.value = formatted;
 }
 
 // ── Country dropdown ──────────────────────────
@@ -302,14 +321,81 @@ function renderFileList() {
 
 function submitForm(e) {
   e.preventDefault();
+  let valid = true;
+
+  // Validate name
+  const nameField = document.getElementById('fieldName');
+  const errName   = document.getElementById('errorName');
+  if (!nameField.value.trim()) {
+    nameField.classList.add('error');
+    errName.classList.add('visible');
+    valid = false;
+  } else {
+    nameField.classList.remove('error');
+    errName.classList.remove('visible');
+  }
+
+  // Validate email or phone
+  const phoneWrap  = document.getElementById('phoneWrap');
+  const isPhone    = phoneWrap && phoneWrap.style.display !== 'none';
+  if (isPhone) {
+    const phoneField = document.getElementById('fieldPhone');
+    const errPhone   = document.getElementById('errorPhone');
+    const digits     = phoneField.value.replace(/\D/g, '');
+    if (digits.length !== 10) {
+      phoneField.classList.add('error');
+      errPhone.classList.add('visible');
+      valid = false;
+    } else {
+      phoneField.classList.remove('error');
+      errPhone.classList.remove('visible');
+    }
+  } else {
+    const emailField = document.getElementById('fieldEmail');
+    const errEmail   = document.getElementById('errorEmail');
+    const emailRe    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(emailField.value.trim())) {
+      emailField.classList.add('error');
+      errEmail.classList.add('visible');
+      valid = false;
+    } else {
+      emailField.classList.remove('error');
+      errEmail.classList.remove('visible');
+    }
+  }
+
+  if (!valid) return;
+
   const msg = document.getElementById('formSuccess');
   msg.classList.add('visible');
   attachedFiles = [];
   renderFileList();
   e.target.reset();
-  switchContact('email');
+  switchContact('phone');
   setTimeout(() => msg.classList.remove('visible'), 4000);
 }
+
+// Live validation — clear error as user types
+document.addEventListener('DOMContentLoaded', () => {
+  const liveValidate = (fieldId, errorId, testFn) => {
+    const f = document.getElementById(fieldId);
+    const e = document.getElementById(errorId);
+    if (!f || !e) return;
+    f.addEventListener('input', () => {
+      if (testFn(f.value)) {
+        f.classList.remove('error'); e.classList.remove('visible');
+      }
+    });
+    f.addEventListener('blur', () => {
+      if (!testFn(f.value)) {
+        f.classList.add('error'); e.classList.add('visible');
+      }
+    });
+  };
+  liveValidate('fieldName',  'errorName',  v => v.trim().length > 0);
+  liveValidate('fieldPhone', 'errorPhone', v => v.replace(/\D/g,'').length === 10);
+  liveValidate('fieldEmail', 'errorEmail', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()));
+});
 
 // ── Stat counter animation ───────────────────
 function animateCounters() {
