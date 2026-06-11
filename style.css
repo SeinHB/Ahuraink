@@ -374,13 +374,13 @@ img { max-width: 100%; display: block; }
    ABOUT SECTION
 =========================== */
 .about-section {
-  padding: 100px 0 100px 40px;
+  padding: 100px 40px 100px 40px;
   overflow: hidden;
 }
 .about-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 0; align-items: stretch;
-  width: 100%;
+  max-width: 1200px; margin: 0 auto;
 }
 .about-text {
   padding-right: 60px;
@@ -434,7 +434,16 @@ img { max-width: 100%; display: block; }
   object-position: center;
   display: block;
 }
-.about-photo--mobile { display: none; }
+.about-photo--mobile {
+  display: none;
+  width: 100%;
+  margin: 24px 0;
+}
+.about-photo--mobile img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 /* ===========================
    PROCESS SECTION
@@ -788,20 +797,10 @@ img { max-width: 100%; display: block; }
 =========================== */
 @media (max-width: 900px) {
   .about-section { padding: 60px 40px; }
-  .about-grid { grid-template-columns: 1fr; gap: 0; max-width: 100%; }
-  .about-text { padding-right: 0; }
+  .about-grid { grid-template-columns: 1fr; gap: 0; max-width: 100%; margin: 0; }
+  .about-text { padding-right: 0; padding-left: 0; }
   .about-visual { display: none; }
-  .about-photo--mobile {
-    display: block;
-    width: 100%;
-    margin: 24px 0;
-    overflow: hidden;
-  }
-  .about-photo--mobile img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
+  .about-photo--mobile { display: block; }
   .about-stats--mobile {
     display: flex;
     width: 100%;
