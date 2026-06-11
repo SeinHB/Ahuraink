@@ -353,7 +353,10 @@ async function submitForm(e) {
     } else {
       phoneField.classList.remove('error');
       errPhone.classList.remove('visible');
-      phoneVal = selectedDial + ' ' + phoneField.value.trim();
+      // Format: 00 + country code (no +) + local number digits
+      const dialDigits = selectedDial.replace('+', '');
+      const localDigits = phoneField.value.replace(/\D/g, '');
+      phoneVal = '00' + dialDigits + localDigits;
     }
   } else {
     const emailField = document.getElementById('fieldEmail');
