@@ -287,7 +287,7 @@
           <div class="contact-item">
             <span class="contact-icon">🕐</span>
             <div>
-              <p class="contact-desc" data-en="24/7 — any day, anytime" data-tr="7/24 — her gün, her zaman">24/7 — any day, anytime</p>
+              <p class="contact-desc" data-en="Any Day, Anytime — 24/7" data-tr="Her Gün, Her Zaman — 7/24">Any Day, Anytime — 24/7</p>
             </div>
           </div>
           <div class="contact-item">
@@ -318,23 +318,23 @@
             allowfullscreen="" loading="lazy"
             referrerpolicy="no-referrer-when-downgrade">
           </iframe>
-          <a href="https://maps.app.goo.gl/NakN4Z4rvmhWPipr6" target="_blank" class="map-open-link" data-en="Open in Google Maps →" data-tr="Google Maps'te Aç →">Open in Google Maps →</a>
         </div>
       </div>
       <div class="contact-form-wrap">
         <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
           <div class="form-group">
             <label data-en="Your Name *" data-tr="Adınız *">Your Name *</label>
-            <input type="text" id="fieldName" required placeholder="—" />
+            <input type="text" id="fieldName" required placeholder="Full name" />
+            <span class="field-error" id="errorName" data-en="Name is required" data-tr="Ad zorunludur">Name is required</span>
           </div>
           <div class="form-group">
-            <label data-en="Email or Phone *" data-tr="E-posta veya Telefon *">Email or Phone *</label>
             <div class="contact-toggle">
-              <button type="button" class="toggle-btn active" id="btnEmail" onclick="switchContact('email')" data-en="Email" data-tr="E-posta">Email</button>
-              <button type="button" class="toggle-btn" id="btnPhone" onclick="switchContact('phone')" data-en="Phone" data-tr="Telefon">Phone</button>
+              <button type="button" class="toggle-btn active" id="btnPhone" onclick="switchContact('phone')" data-en="Phone" data-tr="Telefon">Phone</button>
+              <button type="button" class="toggle-btn" id="btnEmail" onclick="switchContact('email')" data-en="Email" data-tr="E-posta">Email</button>
             </div>
-            <input type="email" id="fieldEmail" placeholder="—" />
-            <div class="phone-input-wrap" id="phoneWrap" style="display:none;">
+            <input type="email" id="fieldEmail" placeholder="something@something.com" style="display:none;" />
+            <span class="field-error" id="errorEmail" data-en="Enter a valid email address" data-tr="Geçerli bir e-posta girin">Enter a valid email address</span>
+            <div class="phone-input-wrap" id="phoneWrap">
               <div class="country-select-wrap">
                 <button type="button" class="country-btn" id="countryBtn" onclick="toggleCountryDropdown()">
                   <img class="flag-img" id="selectedFlag" src="https://flagcdn.com/w40/tr.png" alt="TR" />
@@ -346,8 +346,9 @@
                   <div class="country-list" id="countryList"></div>
                 </div>
               </div>
-              <input type="tel" id="fieldPhone" placeholder="—" />
+              <input type="tel" id="fieldPhone" placeholder="000 000 00 00" maxlength="13" oninput="formatPhone(this)" required />
             </div>
+            <span class="field-error" id="errorPhone" data-en="Enter a valid 10-digit phone number" data-tr="Geçerli 10 haneli numara girin">Enter a valid 10-digit phone number</span>
           </div>
           <div class="form-group">
             <label data-en="Tattoo Idea" data-tr="Dövme Fikri">Tattoo Idea</label>
