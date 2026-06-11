@@ -194,13 +194,13 @@
         </div>
         <div class="section-tag" data-en="OUR STORY" data-tr="HİKAYEMİZ">OUR STORY</div>
         <h2 data-en="Born from Skill,<br/>Built on Craft." data-tr="Beceriden Doğdu,<br/>Ustalıkla İnşa Edildi.">Born from Skill,<br/>Built on Craft.</h2>
-        <!-- Mobile image (after title, mobile only) -->
-        <div class="about-photo about-photo--mobile">
-          <img src="@About_Team.png" alt="Ahura Ink Studio" />
-        </div>
         <p data-en="Ahura Ink Studio was established in Istanbul in 2014 with a clear purpose — to bring together exceptional talent and elevate the standard of tattoo artistry.<br><br>Five artists, each from a distinct background and discipline, united by a shared commitment to precision and craft. We stay attuned to industry evolution while remaining grounded in the principles that define great tattooing.<br><br>At Ahura Ink, every piece is a considered, lasting work of art." data-tr="Ahura Ink Studio, 2014 yılında İstanbul'da net bir amaçla kuruldu — istisnai yetenekleri bir araya getirmek ve dövme sanatının standartlarını yükseltmek.<br><br>Her biri farklı bir geçmişten ve disiplinden gelen beş sanatçı, hassasiyet ve ustalığa olan ortak bağlılıkla bir araya geldi. Sektörün evrimine ayak uydururken, büyük dövme sanatını tanımlayan temel ilkelere bağlı kalıyoruz.<br><br>Ahura Ink'te her eser, düşünülmüş ve kalıcı bir sanat yapıtıdır.">Ahura Ink Studio was established in Istanbul in 2014 with a clear purpose — to bring together exceptional talent and elevate the standard of tattoo artistry.<br><br>Five artists, each from a distinct background and discipline, united by a shared commitment to precision and craft. We stay attuned to industry evolution while remaining grounded in the principles that define great tattooing.<br><br>At Ahura Ink, every piece is a considered, lasting work of art.</p>
         <div class="about-cta">
           <a href="about.html" class="btn-ghost" data-en="Meet Our Team" data-tr="Ekibimizle Tanışın">Meet Our Team</a>
+        </div>
+        <!-- Mobile image (after button, mobile only) -->
+        <div class="about-img-mobile">
+          <img src="@About_Team.png" alt="Ahura Ink Studio" />
         </div>
         <!-- Desktop stats (bottom, desktop only) -->
         <div class="about-stats about-stats--desktop">
@@ -285,48 +285,81 @@
         <h2 data-en="Ready to wear<br/>your story?" data-tr="Hikayeni<br/>taşımaya hazır mısın?">Ready to wear<br/>your story?</h2>
         <div class="contact-details">
           <div class="contact-item">
-            <span class="contact-icon">📍</span>
+            <span class="contact-icon">🕐</span>
             <div>
-              <strong data-en="Address" data-tr="Adres">Address</strong>
-              <p>Turgut Özal, Oktay Rıfat Cd. No:90A, 34513 Esenyurt/İstanbul</p>
+              <p class="contact-desc" data-en="24/7 — any day, anytime" data-tr="7/24 — her gün, her zaman">24/7 — any day, anytime</p>
             </div>
           </div>
           <div class="contact-item">
             <span class="contact-icon">📞</span>
             <div>
-              <strong data-en="Phone" data-tr="Telefon">Phone</strong>
-              <p>+90 536 447 0 488</p>
+              <a href="https://wa.me/905364470488" target="_blank" class="contact-link">+90 536 447 0 488</a>
             </div>
           </div>
           <div class="contact-item">
-            <span class="contact-icon">🕐</span>
+            <span class="contact-icon">📷</span>
             <div>
-              <strong data-en="Hours" data-tr="Çalışma Saatleri">Hours</strong>
-              <p data-en="Mon–Sat: 11:00 – 21:00" data-tr="Pzt–Cmt: 11:00 – 21:00">Mon–Sat: 11:00 – 21:00</p>
+              <a href="https://instagram.com/ahuraink" target="_blank" class="contact-link">@ahuraink</a>
             </div>
           </div>
           <div class="contact-item">
-            <span class="contact-icon">📧</span>
-             <div>
-              <strong>Instagram</strong>
-              <p><a href="https://instagram.com/ahuraink" target="_blank" style="color:#EBB40F; text-decoration:none;">@ahuraink</a></p>
+            <span class="contact-icon">📍</span>
+            <div>
+              <a href="https://maps.app.goo.gl/NakN4Z4rvmhWPipr6" target="_blank" class="contact-link">Caferağa, Mühürdar Cd. no:14 kat4, d:4, 34710 Kadıköy/İstanbul</a>
             </div>
           </div>
         </div>
+        <!-- Google Map embed -->
+        <div class="contact-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9939.883736437328!2d29.01846723996122!3d40.99152850872481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caa16bb763cc8d%3A0x915b2e97e72dc2d5!2sAhuraink%20Tattoo%20Studio!5e0!3m2!1sen!2str!4v1781182409567!5m2!1sen!2str"
+            width="100%" height="260"
+            style="border:0; display:block;"
+            allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+          <a href="https://maps.app.goo.gl/NakN4Z4rvmhWPipr6" target="_blank" class="map-open-link" data-en="Open in Google Maps →" data-tr="Google Maps'te Aç →">Open in Google Maps →</a>
+        </div>
       </div>
       <div class="contact-form-wrap">
-        <form class="contact-form" onsubmit="submitForm(event)">
+        <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
           <div class="form-group">
-            <label data-en="Your Name" data-tr="Adınız">Your Name</label>
-            <input type="text" required placeholder="—" />
+            <label data-en="Your Name *" data-tr="Adınız *">Your Name *</label>
+            <input type="text" id="fieldName" required placeholder="—" />
           </div>
           <div class="form-group">
-            <label>Email</label>
-            <input type="email" required placeholder="—" />
+            <label data-en="Email or Phone *" data-tr="E-posta veya Telefon *">Email or Phone *</label>
+            <div class="contact-toggle">
+              <button type="button" class="toggle-btn active" id="btnEmail" onclick="switchContact('email')" data-en="Email" data-tr="E-posta">Email</button>
+              <button type="button" class="toggle-btn" id="btnPhone" onclick="switchContact('phone')" data-en="Phone" data-tr="Telefon">Phone</button>
+            </div>
+            <input type="email" id="fieldEmail" placeholder="—" />
+            <div class="phone-input-wrap" id="phoneWrap" style="display:none;">
+              <div class="country-select-wrap">
+                <button type="button" class="country-btn" id="countryBtn" onclick="toggleCountryDropdown()">
+                  <img class="flag-img" id="selectedFlag" src="https://flagcdn.com/w40/tr.png" alt="TR" />
+                  <span id="selectedCode">+90</span>
+                  <span class="caret">▾</span>
+                </button>
+                <div class="country-dropdown" id="countryDropdown" style="display:none;">
+                  <input type="text" class="country-search" id="countrySearch" placeholder="Search country..." oninput="filterCountries(this.value)" />
+                  <div class="country-list" id="countryList"></div>
+                </div>
+              </div>
+              <input type="tel" id="fieldPhone" placeholder="—" />
+            </div>
           </div>
           <div class="form-group">
             <label data-en="Tattoo Idea" data-tr="Dövme Fikri">Tattoo Idea</label>
-            <textarea rows="4" placeholder="—"></textarea>
+            <textarea rows="4" id="fieldMessage" placeholder="—"></textarea>
+            <div class="attachment-area">
+              <label class="attach-btn" for="fileUpload">
+                <span>📎</span>
+                <span data-en="Attach Photos (max 3 · JPG, PNG, PDF)" data-tr="Fotoğraf Ekle (maks 3 · JPG, PNG, PDF)">Attach Photos (max 3 · JPG, PNG, PDF)</span>
+              </label>
+              <input type="file" id="fileUpload" accept=".jpg,.jpeg,.png,.pdf" multiple style="display:none;" onchange="handleFiles(this)" />
+              <div class="file-list" id="fileList"></div>
+            </div>
           </div>
           <button type="submit" class="btn-primary" data-en="Send Message" data-tr="Mesaj Gönder">Send Message</button>
           <p class="form-success" id="formSuccess" data-en="✔ Message sent! We'll contact you soon." data-tr="✔ Mesaj gönderildi! Yakında sizi arayacağız.">✔ Message sent! We'll contact you soon.</p>
