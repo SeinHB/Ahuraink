@@ -319,11 +319,13 @@ function renderFileList() {
     </div>`).join('');
 }
 
-function submitForm(e) {
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRI-d1Ng_r7Hu9qjJinNeY8Yeo5Amp1Gty3FfLw8zTU9zCbCUJKGygx5t0WAtERVFz/exec';
+
+async function submitForm(e) {
   e.preventDefault();
   let valid = true;
 
-  // Validate name
+  // ── Validate name ──
   const nameField = document.getElementById('fieldName');
   const errName   = document.getElementById('errorName');
   if (!nameField.value.trim()) {
@@ -335,9 +337,11 @@ function submitForm(e) {
     errName.classList.remove('visible');
   }
 
-  // Validate email or phone
-  const phoneWrap  = document.getElementById('phoneWrap');
-  const isPhone    = phoneWrap && phoneWrap.style.display !== 'none';
+  // ── Validate email or phone ──
+  const phoneWrap = document.getElementById('phoneWrap');
+  const isPhone   = phoneWrap && phoneWrap.style.display !== 'none';
+  let emailVal = '', phoneVal = '';
+
   if (isPhone) {
     const phoneField = document.getElementById('fieldPhone');
     const errPhone   = document.getElementById('errorPhone');
@@ -349,6 +353,7 @@ function submitForm(e) {
     } else {
       phoneField.classList.remove('error');
       errPhone.classList.remove('visible');
+      phoneVal = selectedDial + ' ' + phoneField.value.trim();
     }
   } else {
     const emailField = document.getElementById('fieldEmail');
@@ -361,18 +366,69 @@ function submitForm(e) {
     } else {
       emailField.classList.remove('error');
       errEmail.classList.remove('visible');
+      emailVal = emailField.value.trim();
     }
   }
 
   if (!valid) return;
 
-  const msg = document.getElementById('formSuccess');
-  msg.classList.add('visible');
-  attachedFiles = [];
-  renderFileList();
-  e.target.reset();
-  switchContact('phone');
-  setTimeout(() => msg.classList.remove('visible'), 4000);
+  // ── Show loading state ──
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = currentLang === 'tr' ? 'Gönderiliyor...' : 'Sending...';
+  submitBtn.disabled = true;
+
+  try {
+    // ── Convert files to base64 ──
+    const filesData = await Promise.all(attachedFiles.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = () => resolve({
+          name: file.name,
+          type: file.type,
+          data: reader.result.split(',')[1]
+        });
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }));
+
+    // ── Send to Apps Script ──
+    const payload = {
+      name:    nameField.value.trim(),
+      email:   emailVal,
+      phone:   phoneVal,
+      message: document.getElementById('fieldMessage').value.trim(),
+      files:   filesData
+    };
+
+    const response = await fetch(SCRIPT_URL, {
+      method:  'POST',
+      body:    JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (result.result === 'success') {
+      const msg = document.getElementById('formSuccess');
+      msg.classList.add('visible');
+      attachedFiles = [];
+      renderFileList();
+      e.target.reset();
+      switchContact('phone');
+      setTimeout(() => msg.classList.remove('visible'), 5000);
+    } else {
+      alert('Something went wrong. Please try again or contact us directly.');
+      console.error('Script error:', result.error);
+    }
+
+  } catch (err) {
+    alert('Connection error. Please check your internet and try again.');
+    console.error('Fetch error:', err);
+  } finally {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  }
 }
 
 // Live validation — clear error as user types
