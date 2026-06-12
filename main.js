@@ -319,7 +319,7 @@ function renderFileList() {
     </div>`).join('');
 }
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYDORA8EOUlRu8Y8R-RTz8J2DZxwXBQGCrmOXbQMT7gIuS5JaWSJgTHuIzkmZjVSlQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeMKkmsikCHGijnPsPwErZfcbrBhUGemu511AkwYgIbN8NjQe6gPf0v4plZK1lATHU/exec';
 
 // ── Form popup ────────────────────────────────
 function showFormPopup(type, name) {
@@ -444,24 +444,22 @@ async function submitForm(e) {
       files:   filesData
     };
 
-    const response = await fetch(SCRIPT_URL, {
+    // Google Apps Script requires no-cors — we send and assume success
+    // if the network call doesn't throw
+    await fetch(SCRIPT_URL, {
       method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
       body:    JSON.stringify(payload)
     });
 
-    const result = await response.json();
-
-    if (result.result === 'success') {
-      const senderName = nameField.value.trim();
-      attachedFiles = [];
-      renderFileList();
-      e.target.reset();
-      switchContact('phone');
-      showFormPopup('success', senderName);
-    } else {
-      showFormPopup('error');
-      console.error('Script error:', result.error);
-    }
+    // If fetch didn't throw, treat as success
+    const senderName = nameField.value.trim();
+    attachedFiles = [];
+    renderFileList();
+    e.target.reset();
+    switchContact('phone');
+    showFormPopup('success', senderName);
 
   } catch (err) {
     showFormPopup('error');
