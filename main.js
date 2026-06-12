@@ -319,7 +319,7 @@ function renderFileList() {
     </div>`).join('');
 }
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRI-d1Ng_r7Hu9qjJinNeY8Yeo5Amp1Gty3FfLw8zTU9zCbCUJKGygx5t0WAtERVFz/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYDORA8EOUlRu8Y8R-RTz8J2DZxwXBQGCrmOXbQMT7gIuS5JaWSJgTHuIzkmZjVSlQ/exec';
 
 // ── Form popup ────────────────────────────────
 function showFormPopup(type, name) {
