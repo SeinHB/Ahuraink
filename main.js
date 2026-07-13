@@ -85,13 +85,15 @@ document.querySelectorAll(
 });
 
 // ── Gallery filter ────────────────────────────
+// data-cat supports multiple space-separated slugs, e.g. data-cat="realistic blackgray"
 function filterGallery(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = btn || (event && event.currentTarget);
   if (activeBtn) activeBtn.classList.add('active');
 
   document.querySelectorAll('.gallery-item').forEach(item => {
-    const show = cat === 'all' || item.dataset.cat === cat;
+    const cats = (item.dataset.cat || '').split(' ');
+    const show = cat === 'all' || cats.includes(cat);
     item.classList.toggle('hidden', !show);
   });
 }
