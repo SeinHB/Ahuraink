@@ -115,12 +115,12 @@ function applyFilterFromURL() {
 // ── Lightbox ──────────────────────────────────
 function openLightbox(el) {
   const lb = document.getElementById('lightbox');
-  const catEl    = el.querySelector('.gallery-cat');
-  const titleEl  = el.querySelector('.gallery-title');
-  const thumbEl  = el.querySelector('.thumb-placeholder');
+  const catsEl  = el.querySelector('.gallery-cats');
+  const idEl    = el.querySelector('.gallery-id');
+  const thumbEl = el.querySelector('.thumb-placeholder');
 
-  document.getElementById('lightboxCat').textContent   = catEl   ? catEl.textContent   : '';
-  document.getElementById('lightboxTitle').textContent = titleEl ? titleEl.textContent : '';
+  document.getElementById('lightboxCat').textContent   = catsEl ? catsEl.textContent : '';
+  document.getElementById('lightboxTitle').textContent = idEl   ? idEl.textContent   : '';
 
   const img = document.getElementById('lightboxImage');
   img.innerHTML = thumbEl ? thumbEl.innerHTML : '';
