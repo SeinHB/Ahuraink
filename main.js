@@ -60,6 +60,16 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 60);
 });
 
+// ── Filter bar sticky opacity ─────────────────
+const filterBar = document.querySelector('.filter-bar');
+if (filterBar) {
+  const stickyOffset = 70; // nav height
+  window.addEventListener('scroll', () => {
+    const stuck = window.scrollY >= filterBar.offsetTop - stickyOffset;
+    filterBar.classList.toggle('is-stuck', stuck);
+  }, { passive: true });
+}
+
 // ── Mobile menu ───────────────────────────────
 function toggleMenu() {
   const menu = document.getElementById('mobileMenu');
