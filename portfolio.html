@@ -411,7 +411,11 @@
       <!-- image + id badge + magnifier lens injected by JS -->
       <div class="lightbox-image" id="lightboxImage"></div>
       <div class="lightbox-info">
-        <div class="lightbox-chips" id="lightboxChips"></div>
+        <!-- chips + ID badge side by side (badge visible on mobile, title on desktop) -->
+        <div class="lightbox-meta-row">
+          <div class="lightbox-chips" id="lightboxChips"></div>
+          <span class="lightbox-id-badge" id="lightboxIdBadge"></span>
+        </div>
         <h3 class="lightbox-title" id="lightboxTitle"></h3>
         <button class="btn-primary lightbox-book-btn" onclick="openBookingForm()" data-en="Book This Design" data-tr="Bu Tasarımı Rezerve Et">Book This Design</button>
       </div>
