@@ -145,7 +145,7 @@ function openLightbox(el) {
   imgFrame.innerHTML = imgSrc
     ? `<img src="${imgSrc}" alt="${idText}">
        <div class="lightbox-id-badge">${idText}</div>
-       <div class="lightbox-lens" id="lightboxLens"><img src="${imgSrc}" alt=""></div>`
+       <div class="lightbox-lens" id="lightboxLens"></div>`
     : `<div class="lightbox-id-badge">${idText}</div>`;
 
   // Desktop title (ID number in info panel)
@@ -174,40 +174,40 @@ function initMagnifier() {
   const lens  = document.getElementById('lightboxLens');
   if (!frame || !lens) return;
 
-  const lensImg = lens.querySelector('img');
-  if (!lensImg) return;
+  // The src comes from the main photo inside the frame
+  const mainImg = frame.querySelector('img');
+  if (!mainImg) return;
 
-  const LENS_R = 80;  // radius = half of 160px
+  const LENS_R = 80;   // half of 160px diameter
   const ZOOM   = 2;
 
   function onMouseMove(e) {
     if (window.matchMedia('(hover: none)').matches) return;
 
     const rect = frame.getBoundingClientRect();
-    // Cursor position relative to the frame
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = e.clientX - rect.left;   // cursor x within frame
+    const y = e.clientY - rect.top;    // cursor y within frame
 
-    // Place lens centred on cursor, clamped so it stays inside the frame
+    // Move lens circle to follow cursor, clamped so it never clips the frame edge
     const lx = Math.max(LENS_R, Math.min(rect.width  - LENS_R, x));
     const ly = Math.max(LENS_R, Math.min(rect.height - LENS_R, y));
-    lens.style.left = (lx - LENS_R) + 'px';
-    lens.style.top  = (ly - LENS_R) + 'px';
+    lens.style.left    = (lx - LENS_R) + 'px';
+    lens.style.top     = (ly - LENS_R) + 'px';
     lens.style.display = 'block';
 
-    // The lens image is the same src at 2× the frame's rendered size.
-    // We shift it so the pixel under the cursor ends up at the lens centre.
-    // At 2× zoom, the cursor pixel lives at (x*2, y*2) in the zoomed image.
-    // To centre it in the lens: left = LENS_R - x*ZOOM, top = LENS_R - y*ZOOM
-    lensImg.style.width  = (rect.width  * ZOOM) + 'px';
-    lensImg.style.height = (rect.height * ZOOM) + 'px';
-    lensImg.style.left   = (LENS_R - x * ZOOM) + 'px';
-    lensImg.style.top    = (LENS_R - y * ZOOM) + 'px';
+    // Background-image zoom:
+    // backgroundSize  = frame size × ZOOM  (makes image appear 2× bigger)
+    // backgroundPosition: we want the pixel at (x, y) in the original to appear
+    //   at the lens centre (LENS_R, LENS_R).
+    //   In zoomed space that pixel is at (x*ZOOM, y*ZOOM).
+    //   So offset = LENS_R - x*ZOOM, LENS_R - y*ZOOM
+    lens.style.backgroundImage    = `url('${mainImg.src}')`;
+    lens.style.backgroundSize     = `${rect.width * ZOOM}px ${rect.height * ZOOM}px`;
+    lens.style.backgroundPosition = `${LENS_R - x * ZOOM}px ${LENS_R - y * ZOOM}px`;
   }
 
   function onMouseLeave() { lens.style.display = 'none'; }
 
-  // Swap listeners cleanly each time openLightbox fires
   frame.removeEventListener('mousemove',  frame._lensMove);
   frame.removeEventListener('mouseleave', frame._lensLeave);
   frame._lensMove  = onMouseMove;
