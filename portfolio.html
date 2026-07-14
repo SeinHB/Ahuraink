@@ -408,11 +408,11 @@
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <div class="lightbox-content" onclick="event.stopPropagation()">
+      <!-- image + id badge + magnifier lens injected by JS -->
       <div class="lightbox-image" id="lightboxImage"></div>
       <div class="lightbox-info">
-        <span class="lightbox-cat" id="lightboxCat"></span>
-        <h3 class="lightbox-title" id="lightboxTitle"></h3>
-        <button class="btn-primary" onclick="openBookingForm()" data-en="Book This Design" data-tr="Bu Tasarımı Rezerve Et">Book This Design</button>
+        <div class="lightbox-chips" id="lightboxChips"></div>
+        <button class="btn-primary lightbox-book-btn" onclick="openBookingForm()" data-en="Book This Design" data-tr="Bu Tasarımı Rezerve Et">Book This Design</button>
       </div>
     </div>
   </div>
