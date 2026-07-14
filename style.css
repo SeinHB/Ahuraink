@@ -956,17 +956,19 @@ img { max-width: 100%; display: block; }
   justify-content: space-between; gap: 12px;
 }
 
-/* Magnifying glass lens (desktop only) — background-image based */
+/* Magnifying glass lens — fixed over the entire lightbox, never clipped */
 .lightbox-lens {
-  position: absolute; z-index: 20;
-  width: 160px; height: 160px;
+  position: fixed; z-index: 1001;
+  width: 240px; height: 240px;
   border-radius: 50%;
   pointer-events: none;
   display: none; /* shown by JS on mousemove */
-  box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.7);
   background-repeat: no-repeat;
-  /* no overflow:hidden needed — background is clipped to border-box */
 }
+
+/* Hide the ink cursor while the magnifier is active */
+body.lens-active #ink-cursor { opacity: 0; }
 
 /* Info panel beside the image */
 .lightbox-info {
