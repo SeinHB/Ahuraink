@@ -412,8 +412,85 @@
       <div class="lightbox-info">
         <span class="lightbox-cat" id="lightboxCat"></span>
         <h3 class="lightbox-title" id="lightboxTitle"></h3>
-        <a href="index.html#contact" class="btn-primary" data-en="Book This Style" data-tr="Bu Stili Rezerve Et">Book This Style</a>
+        <button class="btn-primary" onclick="openBookingForm()" data-en="Book This Design" data-tr="Bu Tasarımı Rezerve Et">Book This Design</button>
       </div>
+    </div>
+  </div>
+
+  <!-- BOOKING POPUP -->
+  <div class="booking-overlay" id="bookingOverlay" onclick="closeBookingFormOutside(event)">
+    <div class="booking-popup">
+      <button class="booking-close" onclick="closeBookingForm()">✕</button>
+      <div class="booking-design-badge" id="bookingDesignBadge"></div>
+      <h3 class="booking-title" data-en="Book This Design" data-tr="Bu Tasarımı Rezerve Et">Book This Design</h3>
+      <form class="booking-form" id="bookingForm" onsubmit="submitBookingForm(event)">
+
+        <!-- Name -->
+        <div class="form-group">
+          <label data-en="YOUR NAME" data-tr="ADINIZ">YOUR NAME</label>
+          <input type="text" id="bookFieldName" placeholder="Full name" data-en="Full name" data-tr="Adınız Soyadınız">
+          <span class="field-error" id="bookErrorName" data-en="Please enter your name." data-tr="Lütfen adınızı girin.">Please enter your name.</span>
+        </div>
+
+        <!-- Contact toggle -->
+        <div class="form-group">
+          <label data-en="HOW TO REACH YOU" data-tr="SİZE NASIL ULAŞALİM">HOW TO REACH YOU</label>
+          <div class="contact-toggle">
+            <button type="button" id="bookBtnPhone" class="toggle-btn active" onclick="bookSwitchContact('phone')" data-en="Phone" data-tr="Telefon">Phone</button>
+            <button type="button" id="bookBtnEmail" class="toggle-btn" onclick="bookSwitchContact('email')" data-en="Email" data-tr="E-posta">Email</button>
+          </div>
+          <!-- Phone -->
+          <div class="phone-input-wrap" id="bookPhoneWrap" style="margin-top:8px;">
+            <div class="country-select-wrap">
+              <button type="button" class="country-btn" id="bookCountryBtn" onclick="bookToggleCountryDropdown()">
+                <img class="flag-img" id="bookSelectedFlag" src="https://flagcdn.com/w40/tr.png" alt="TR">
+                <span id="bookSelectedCode">+90</span>
+                <span class="caret">▾</span>
+              </button>
+              <div class="country-dropdown" id="bookCountryDropdown" style="display:none;flex-direction:column;">
+                <input class="country-search" id="bookCountrySearch" type="text" placeholder="Search..." oninput="bookFilterCountries(this.value)">
+                <div class="country-list" id="bookCountryList"></div>
+              </div>
+            </div>
+            <input type="tel" id="bookFieldPhone" placeholder="000 000 00 00" oninput="formatPhone(this)">
+          </div>
+          <span class="field-error" id="bookErrorPhone" data-en="Please enter a valid phone number." data-tr="Geçerli bir telefon numarası girin.">Please enter a valid phone number.</span>
+          <!-- Email (hidden by default) -->
+          <input type="email" id="bookFieldEmail" placeholder="your@email.com" style="display:none;margin-top:8px;">
+          <span class="field-error" id="bookErrorEmail" data-en="Please enter a valid email." data-tr="Geçerli bir e-posta girin.">Please enter a valid email.</span>
+        </div>
+
+        <!-- Message -->
+        <div class="form-group">
+          <label data-en="MESSAGE (OPTIONAL)" data-tr="MESAJ (İSTEĞE BAĞLI)">MESSAGE (OPTIONAL)</label>
+          <textarea id="bookFieldMessage" rows="3" placeholder="Any additional details..." data-en="Any additional details..." data-tr="Eklemek istediğiniz detaylar..."></textarea>
+        </div>
+
+        <!-- Attachment -->
+        <div class="form-group">
+          <label data-en="ATTACH REFERENCE (OPTIONAL)" data-tr="REFERANS EKLE (İSTEĞE BAĞLI)">ATTACH REFERENCE (OPTIONAL)</label>
+          <div class="attachment-area">
+            <label class="attach-btn" for="bookFileInput">
+              <span>📎</span>
+              <span data-en="Add files (max 3)" data-tr="Dosya ekle (maks 3)">Add files (max 3)</span>
+            </label>
+            <input type="file" id="bookFileInput" multiple accept=".jpg,.jpeg,.png,.pdf" style="display:none;" onchange="bookHandleFiles(this)">
+            <div class="file-list" id="bookFileList"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%;text-align:center;" data-en="SEND REQUEST" data-tr="TALEBİ GÖNDER">SEND REQUEST</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS / ERROR POPUP -->
+  <div class="form-popup-overlay" id="formPopupOverlay" onclick="closeFormPopup()">
+    <div class="form-popup" onclick="event.stopPropagation()">
+      <button class="form-popup-close" onclick="closeFormPopup()">✕</button>
+      <div class="form-popup-icon" id="formPopupIcon"></div>
+      <h3 class="form-popup-title" id="formPopupTitle"></h3>
+      <p class="form-popup-desc" id="formPopupDesc"></p>
     </div>
   </div>
 
