@@ -68,7 +68,7 @@
     <button class="filter-btn" onclick="filterGallery('mandala')" data-en="Mandala" data-tr="Mandala">Mandala</button>
   </div>
 
-  <!-- GALLERY GRID -->
+  <!-- GALLERY GRID — populated dynamically from gallery-data.js -->
   <section class="gallery-section">
     <div class="gallery-grid" id="galleryGrid">
 
@@ -401,6 +401,7 @@
         </div>
       </div>
 
+      <!-- ↑ Fallback static items above are replaced at runtime by renderGallery() -->
     </div>
   </section>
 
@@ -521,6 +522,7 @@
     </div>
   </footer>
 
+  <script src="gallery-data.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
