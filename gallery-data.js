@@ -42,5 +42,4 @@ const GALLERY_DATA = [
   { id: "042", cats: ["graywash", "realistic"], src: "gallery/042%20GW%20-%20R.jpg" },
   { id: "043", cats: ["graywash", "realistic"], src: "gallery/043%20GW%20-%20R.jpg" },
   { id: "044", cats: ["mandala"], src: "gallery/044%20M.jpg" },
-  { id: "047", cats: ["graywash", "colorart"], src: "gallery/047%20GW%20-%20CA.jpg" },
 ];
