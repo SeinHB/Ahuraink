@@ -149,11 +149,12 @@ function filterGallery(cat, btn) {
     item.classList.toggle('hidden', !show);
   });
 
-  // Always scroll so the filter bar sits just below the nav
+  // Always scroll so the filter bar sits just below the nav.
+  // Use offsetTop (natural page position) — getBoundingClientRect returns 70
+  // when the bar is already stuck, making the scroll a no-op.
   const bar = document.querySelector('.filter-bar');
   if (bar) {
-    const target = bar.getBoundingClientRect().top + window.scrollY - 70;
-    window.scrollTo({ top: target, behavior: 'smooth' });
+    window.scrollTo({ top: bar.offsetTop - 70, behavior: 'smooth' });
   }
 }
 
