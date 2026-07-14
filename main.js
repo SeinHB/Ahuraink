@@ -112,7 +112,14 @@ function renderGallery() {
   const grid = document.getElementById('galleryGrid');
   if (!grid || typeof GALLERY_DATA === 'undefined') return;
 
-  grid.innerHTML = GALLERY_DATA.map(item => {
+  // Shuffle — random order on every page load, filter order is random too
+  const shuffled = [...GALLERY_DATA];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  grid.innerHTML = shuffled.map(item => {
     const dataCat = item.cats.join(' ');
     const catEn   = item.cats.map(c => (CAT_LABELS[c] || {}).en || c).join(' · ');
     const catTr   = item.cats.map(c => (CAT_LABELS[c] || {}).tr || c).join(' · ');
