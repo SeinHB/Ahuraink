@@ -112,21 +112,247 @@ function applyFilterFromURL() {
   filterGallery(cat, btn);
 }
 
+// ── Current design (shared between lightbox & booking form) ──
+let currentDesign = { id: '', cats: '' };
+
 // ── Lightbox ──────────────────────────────────
 function openLightbox(el) {
   const lb = document.getElementById('lightbox');
-  const catsEl  = el.querySelector('.gallery-cats');
-  const idEl    = el.querySelector('.gallery-id');
-  const thumbEl = el.querySelector('.thumb-placeholder');
+  const catsEl = el.querySelector('.gallery-cats');
+  const idEl   = el.querySelector('.gallery-id');
+  const srcImg = el.querySelector('img');
 
-  document.getElementById('lightboxCat').textContent   = catsEl ? catsEl.textContent : '';
-  document.getElementById('lightboxTitle').textContent = idEl   ? idEl.textContent   : '';
+  const catText = catsEl ? catsEl.textContent : '';
+  const idText  = idEl   ? idEl.textContent   : '';
 
-  const img = document.getElementById('lightboxImage');
-  img.innerHTML = thumbEl ? thumbEl.innerHTML : '';
+  document.getElementById('lightboxCat').textContent   = catText;
+  document.getElementById('lightboxTitle').textContent = idText;
+
+  // store for booking form
+  currentDesign.id   = idText;
+  currentDesign.cats = catText;
+
+  // show actual photo
+  const imgEl = document.getElementById('lightboxImage');
+  imgEl.innerHTML = srcImg
+    ? `<img src="${srcImg.src}" alt="${idText}">`
+    : '';
 
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+// ── Booking form — open / close ───────────────
+function openBookingForm() {
+  closeLightbox();
+  const badge = document.getElementById('bookingDesignBadge');
+  if (badge) {
+    badge.innerHTML =
+      `<span class="badge-id">${currentDesign.id}</span>` +
+      `<span class="badge-cats">${currentDesign.cats}</span>`;
+  }
+  const overlay = document.getElementById('bookingOverlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBookingForm() {
+  const overlay = document.getElementById('bookingOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeBookingFormOutside(e) {
+  if (e.target === document.getElementById('bookingOverlay')) closeBookingForm();
+}
+
+// ── Booking phone/email toggle ────────────────
+function bookSwitchContact(mode) {
+  const emailField = document.getElementById('bookFieldEmail');
+  const phoneWrap  = document.getElementById('bookPhoneWrap');
+  const btnEmail   = document.getElementById('bookBtnEmail');
+  const btnPhone   = document.getElementById('bookBtnPhone');
+  if (!emailField) return;
+  if (mode === 'email') {
+    emailField.style.display = '';
+    phoneWrap.style.display  = 'none';
+    btnEmail.classList.add('active');
+    btnPhone.classList.remove('active');
+  } else {
+    emailField.style.display = 'none';
+    phoneWrap.style.display  = 'flex';
+    btnPhone.classList.add('active');
+    btnEmail.classList.remove('active');
+  }
+}
+
+// ── Booking country dropdown ──────────────────
+let bookSelectedDial = '+90';
+let bookSelectedCountryCode = 'TR';
+
+function bookToggleCountryDropdown() {
+  const dd = document.getElementById('bookCountryDropdown');
+  if (!dd) return;
+  const open = dd.style.display === 'none' || !dd.style.display;
+  dd.style.display = open ? 'flex' : 'none';
+  if (open) { bookRenderCountryList(); document.getElementById('bookCountrySearch').focus(); }
+}
+
+function bookRenderCountryList(filter = '') {
+  const list = document.getElementById('bookCountryList');
+  if (!list) return;
+  const filtered = filter
+    ? COUNTRIES.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()) || c.dial.includes(filter))
+    : COUNTRIES;
+  list.innerHTML = filtered.map(c => `
+    <div class="country-option" onclick="bookSelectCountry('${c.code}','${c.dial}')">
+      <img class="flag-img" src="https://flagcdn.com/w40/${c.code.toLowerCase()}.png" alt="${c.code}">
+      <span>${c.name}</span>
+      <span style="margin-left:auto;color:var(--muted)">${c.dial}</span>
+    </div>`).join('');
+}
+
+function bookFilterCountries(val) { bookRenderCountryList(val); }
+
+function bookSelectCountry(code, dial) {
+  bookSelectedDial = dial; bookSelectedCountryCode = code;
+  document.getElementById('bookSelectedFlag').src = `https://flagcdn.com/w40/${code.toLowerCase()}.png`;
+  document.getElementById('bookSelectedFlag').alt = code;
+  document.getElementById('bookSelectedCode').textContent = dial;
+  document.getElementById('bookCountryDropdown').style.display = 'none';
+}
+
+document.addEventListener('click', e => {
+  const dd  = document.getElementById('bookCountryDropdown');
+  const btn = document.getElementById('bookCountryBtn');
+  if (dd && btn && !dd.contains(e.target) && !btn.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
+
+// ── Booking file attachment ───────────────────
+let bookAttachedFiles = [];
+
+function bookHandleFiles(input) {
+  const allowed = ['image/jpeg', 'image/png', 'application/pdf'];
+  for (const f of Array.from(input.files)) {
+    if (bookAttachedFiles.length >= 3) break;
+    if (!allowed.includes(f.type)) continue;
+    bookAttachedFiles.push(f);
+  }
+  input.value = '';
+  bookRenderFileList();
+  const btn = document.querySelector('label[for="bookFileInput"]');
+  if (btn) {
+    btn.style.opacity       = bookAttachedFiles.length >= 3 ? '0.4' : '';
+    btn.style.pointerEvents = bookAttachedFiles.length >= 3 ? 'none' : '';
+  }
+}
+
+function bookRemoveFile(i) {
+  bookAttachedFiles.splice(i, 1);
+  bookRenderFileList();
+  const btn = document.querySelector('label[for="bookFileInput"]');
+  if (btn) { btn.style.opacity = ''; btn.style.pointerEvents = ''; }
+}
+
+function bookRenderFileList() {
+  const list = document.getElementById('bookFileList');
+  if (!list) return;
+  list.innerHTML = bookAttachedFiles.map((f, i) => `
+    <div class="file-item">
+      <span>${f.name}</span>
+      <button type="button" class="file-remove" onclick="bookRemoveFile(${i})">✕</button>
+    </div>`).join('');
+}
+
+// ── Booking form submit ───────────────────────
+async function submitBookingForm(e) {
+  e.preventDefault();
+  let valid = true;
+
+  const nameField = document.getElementById('bookFieldName');
+  const errName   = document.getElementById('bookErrorName');
+  if (!nameField.value.trim()) {
+    nameField.classList.add('error'); errName.classList.add('visible'); valid = false;
+  } else {
+    nameField.classList.remove('error'); errName.classList.remove('visible');
+  }
+
+  const phoneWrap = document.getElementById('bookPhoneWrap');
+  const isPhone   = phoneWrap && phoneWrap.style.display !== 'none';
+  let emailVal = '', phoneVal = '';
+
+  if (isPhone) {
+    const phoneField = document.getElementById('bookFieldPhone');
+    const errPhone   = document.getElementById('bookErrorPhone');
+    const digits = phoneField.value.replace(/\D/g, '');
+    if (digits.length !== 10) {
+      phoneField.classList.add('error'); errPhone.classList.add('visible'); valid = false;
+    } else {
+      phoneField.classList.remove('error'); errPhone.classList.remove('visible');
+      phoneVal = '00' + bookSelectedDial.replace('+', '') + digits;
+    }
+  } else {
+    const emailField = document.getElementById('bookFieldEmail');
+    const errEmail   = document.getElementById('bookErrorEmail');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim())) {
+      emailField.classList.add('error'); errEmail.classList.add('visible'); valid = false;
+    } else {
+      emailField.classList.remove('error'); errEmail.classList.remove('visible');
+      emailVal = emailField.value.trim();
+    }
+  }
+
+  if (!valid) return;
+
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const origText  = submitBtn.textContent;
+  submitBtn.textContent = currentLang === 'tr' ? 'Gönderiliyor...' : 'Sending...';
+  submitBtn.disabled = true;
+
+  try {
+    const filesData = await Promise.all(bookAttachedFiles.map(file => new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload  = () => res({ name: file.name, type: file.type, data: reader.result.split(',')[1] });
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    })));
+
+    // prepend design reference to message so it always appears in the sheet
+    const designRef = `[Design #${currentDesign.id} — ${currentDesign.cats}]`;
+    const userMsg   = document.getElementById('bookFieldMessage').value.trim();
+    const fullMsg   = userMsg ? `${designRef}\n\n${userMsg}` : designRef;
+
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        name:    nameField.value.trim(),
+        email:   emailVal,
+        phone:   phoneVal,
+        message: fullMsg,
+        files:   filesData
+      })
+    });
+
+    const senderName = nameField.value.trim();
+    bookAttachedFiles = [];
+    bookRenderFileList();
+    e.target.reset();
+    bookSwitchContact('phone');
+    closeBookingForm();
+    showFormPopup('success', senderName);
+
+  } catch (err) {
+    showFormPopup('error');
+    console.error(err);
+  } finally {
+    submitBtn.textContent = origText;
+    submitBtn.disabled = false;
+  }
 }
 
 function closeLightbox() {
@@ -135,7 +361,11 @@ function closeLightbox() {
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape') {
+    closeLightbox();
+    closeBookingForm();
+    closeFormPopup();
+  }
 });
 
 // ── Contact form — email/phone toggle ────────
@@ -358,9 +588,6 @@ function closeFormPopup() {
   document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeFormPopup();
-});
 
 async function submitForm(e) {
   e.preventDefault();
