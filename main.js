@@ -133,23 +133,92 @@ function openLightbox(el) {
   const srcImg = el.querySelector('img');
 
   const catText = catsEl ? catsEl.textContent : '';
-  const idText  = idEl   ? idEl.textContent   : '';
-
-  document.getElementById('lightboxCat').textContent   = catText;
-  document.getElementById('lightboxTitle').textContent = idText;
+  const idText  = idEl  ? idEl.textContent   : '';
 
   // store for booking form
   currentDesign.id   = idText;
   currentDesign.cats = catText;
 
-  // show actual photo
-  const imgEl = document.getElementById('lightboxImage');
-  imgEl.innerHTML = srcImg
-    ? `<img src="${srcImg.src}" alt="${idText}">`
+  // Build image frame content: photo + id badge + lens div
+  const imgFrame = document.getElementById('lightboxImage');
+  const imgSrc   = srcImg ? srcImg.src : '';
+  imgFrame.innerHTML = imgSrc
+    ? `<img src="${imgSrc}" alt="${idText}">
+       <div class="lightbox-id-badge">${idText}</div>
+       <div class="lightbox-lens" id="lightboxLens"><img src="${imgSrc}" alt=""></div>`
+    : `<div class="lightbox-id-badge">${idText}</div>`;
+
+  // Build category chips
+  const chipsEl = document.getElementById('lightboxChips');
+  const chipList = catText
+    ? catText.split(' · ').map(c =>
+        `<span class="lightbox-chip">${c.trim()}</span>`
+      ).join('')
     : '';
+  chipsEl.innerHTML = chipList;
 
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Wire up magnifier after DOM is updated
+  initMagnifier();
+}
+
+// ── Magnifying glass (desktop only) ───────────
+function initMagnifier() {
+  const frame = document.getElementById('lightboxImage');
+  const lens  = document.getElementById('lightboxLens');
+  if (!frame || !lens) return;
+
+  const mainImg = frame.querySelector('img:not(.lightbox-lens img)');
+  const lensImg = lens.querySelector('img');
+  if (!mainImg || !lensImg) return;
+
+  const LENS_SIZE  = 160; // px diameter
+  const ZOOM       = 2;
+
+  function onMouseMove(e) {
+    // Only run on non-touch devices
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    const rect = frame.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Keep lens centre inside frame
+    const lx = Math.max(LENS_SIZE / 2, Math.min(rect.width  - LENS_SIZE / 2, x));
+    const ly = Math.max(LENS_SIZE / 2, Math.min(rect.height - LENS_SIZE / 2, y));
+
+    lens.style.display = 'block';
+    lens.style.left = (lx - LENS_SIZE / 2) + 'px';
+    lens.style.top  = (ly - LENS_SIZE / 2) + 'px';
+
+    // The lens <img> is 200% × 200% of the lens size = natural 2× zoom.
+    // We offset it so the area under the cursor is centred in the lens.
+    const imgW = rect.width  * ZOOM;
+    const imgH = rect.height * ZOOM;
+    // cursor position in zoomed space
+    const zoomX = x * ZOOM;
+    const zoomY = y * ZOOM;
+    // shift so that point is centred in lens
+    const offX = -(zoomX - LENS_SIZE / 2);
+    const offY = -(zoomY - LENS_SIZE / 2);
+
+    lensImg.style.width  = imgW + 'px';
+    lensImg.style.height = imgH + 'px';
+    lensImg.style.left   = offX + 'px';
+    lensImg.style.top    = offY + 'px';
+  }
+
+  function onMouseLeave() { lens.style.display = 'none'; }
+
+  // Remove any old listeners by cloning the frame (cheap since it has no event listeners we care to keep)
+  frame.removeEventListener('mousemove', frame._lensMove);
+  frame.removeEventListener('mouseleave', frame._lensLeave);
+  frame._lensMove  = onMouseMove;
+  frame._lensLeave = onMouseLeave;
+  frame.addEventListener('mousemove',  onMouseMove);
+  frame.addEventListener('mouseleave', onMouseLeave);
 }
 
 // ── Booking form — open / close ───────────────
@@ -366,7 +435,14 @@ async function submitBookingForm(e) {
 }
 
 function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  // clear image content so no stale lens state persists
+  const frame = document.getElementById('lightboxImage');
+  if (frame) {
+    const lens = document.getElementById('lightboxLens');
+    if (lens) lens.style.display = 'none';
+  }
   document.body.style.overflow = '';
 }
 
