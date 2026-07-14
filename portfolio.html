@@ -406,6 +406,8 @@
 
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <!-- Lens floats over the whole lightbox at fixed position — not clipped by image frame -->
+    <div class="lightbox-lens" id="lightboxLens"></div>
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <div class="lightbox-content" onclick="event.stopPropagation()">
       <!-- image + id badge + magnifier lens injected by JS -->
