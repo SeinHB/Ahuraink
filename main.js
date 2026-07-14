@@ -144,8 +144,7 @@ function openLightbox(el) {
   const imgFrame = document.getElementById('lightboxImage');
   const imgSrc   = srcImg ? srcImg.src : '';
   imgFrame.innerHTML = imgSrc
-    ? `<img src="${imgSrc}" alt="${idText}">
-       <div class="lightbox-lens" id="lightboxLens"></div>`
+    ? `<img src="${imgSrc}" alt="${idText}">`
     : '';
 
   // Desktop: ID as title in info panel
@@ -180,50 +179,53 @@ function lightboxChipClick(slug) {
 }
 
 // ── Magnifying glass (desktop only) ───────────
+// Lens lives in #lightbox (fixed, full-screen) so it's never clipped by the image frame.
+// It follows e.clientX/Y directly — no clamping, perfectly centred on cursor.
 function initMagnifier() {
   const frame = document.getElementById('lightboxImage');
   const lens  = document.getElementById('lightboxLens');
   if (!frame || !lens) return;
 
-  // The src comes from the main photo inside the frame
   const mainImg = frame.querySelector('img');
   if (!mainImg) return;
 
-  const LENS_R = 80;   // half of 160px diameter
+  const LENS_R = 120;  // half of 240px
   const ZOOM   = 2;
 
   function onMouseMove(e) {
     if (window.matchMedia('(hover: none)').matches) return;
 
-    const rect = frame.getBoundingClientRect();
-    const x = e.clientX - rect.left;   // cursor x within frame
-    const y = e.clientY - rect.top;    // cursor y within frame
-
-    // Move lens circle to follow cursor, clamped so it never clips the frame edge
-    const lx = Math.max(LENS_R, Math.min(rect.width  - LENS_R, x));
-    const ly = Math.max(LENS_R, Math.min(rect.height - LENS_R, y));
-    lens.style.left    = (lx - LENS_R) + 'px';
-    lens.style.top     = (ly - LENS_R) + 'px';
+    // Position lens centred exactly on the cursor (viewport coords — no clamping)
+    lens.style.left    = (e.clientX - LENS_R) + 'px';
+    lens.style.top     = (e.clientY - LENS_R) + 'px';
     lens.style.display = 'block';
 
-    // Background-image zoom:
-    // backgroundSize  = frame size × ZOOM  (makes image appear 2× bigger)
-    // backgroundPosition: we want the pixel at (x, y) in the original to appear
-    //   at the lens centre (LENS_R, LENS_R).
-    //   In zoomed space that pixel is at (x*ZOOM, y*ZOOM).
-    //   So offset = LENS_R - x*ZOOM, LENS_R - y*ZOOM
+    // Cursor position relative to the image frame
+    const rect = frame.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Background at 2× zoom, offset so cursor pixel lands at lens centre
     lens.style.backgroundImage    = `url('${mainImg.src}')`;
     lens.style.backgroundSize     = `${rect.width * ZOOM}px ${rect.height * ZOOM}px`;
     lens.style.backgroundPosition = `${LENS_R - x * ZOOM}px ${LENS_R - y * ZOOM}px`;
   }
 
-  function onMouseLeave() { lens.style.display = 'none'; }
+  function onMouseEnter() { document.body.classList.add('lens-active'); }
+
+  function onMouseLeave() {
+    lens.style.display = 'none';
+    document.body.classList.remove('lens-active');
+  }
 
   frame.removeEventListener('mousemove',  frame._lensMove);
+  frame.removeEventListener('mouseenter', frame._lensEnter);
   frame.removeEventListener('mouseleave', frame._lensLeave);
   frame._lensMove  = onMouseMove;
+  frame._lensEnter = onMouseEnter;
   frame._lensLeave = onMouseLeave;
   frame.addEventListener('mousemove',  onMouseMove);
+  frame.addEventListener('mouseenter', onMouseEnter);
   frame.addEventListener('mouseleave', onMouseLeave);
 }
 
@@ -441,14 +443,10 @@ async function submitBookingForm(e) {
 }
 
 function closeLightbox() {
-  const lb = document.getElementById('lightbox');
-  lb.classList.remove('open');
-  // clear image content so no stale lens state persists
-  const frame = document.getElementById('lightboxImage');
-  if (frame) {
-    const lens = document.getElementById('lightboxLens');
-    if (lens) lens.style.display = 'none';
-  }
+  document.getElementById('lightbox').classList.remove('open');
+  const lens = document.getElementById('lightboxLens');
+  if (lens) lens.style.display = 'none';
+  document.body.classList.remove('lens-active');
   document.body.style.overflow = '';
 }
 
