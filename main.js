@@ -141,6 +141,13 @@ function filterGallery(cat, btn) {
     const show = cat === 'all' || cats.includes(cat);
     item.classList.toggle('hidden', !show);
   });
+
+  // Always scroll so the filter bar sits just below the nav
+  const bar = document.querySelector('.filter-bar');
+  if (bar) {
+    const target = bar.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  }
 }
 
 // ── Navigate to portfolio with filter ─────────
@@ -206,11 +213,17 @@ function openLightbox(el) {
   initMagnifier();
 }
 
-// ── Chip click — close lightbox & apply filter ─
+// ── Chip click — close lightbox, apply filter, scroll to filter bar ─
 function lightboxChipClick(slug) {
   closeLightbox();
   const btn = document.querySelector(`.filter-btn[onclick*="'${slug}'"]`);
   filterGallery(slug, btn);
+  // Scroll so the filter bar sits at the top of the viewport (below the nav)
+  const bar = document.querySelector('.filter-bar');
+  if (bar) {
+    const target = bar.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  }
 }
 
 // ── Magnifying glass (desktop only) ───────────
