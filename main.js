@@ -94,6 +94,41 @@ document.querySelectorAll(
   revealObserver.observe(el);
 });
 
+// ── Category labels (EN / TR) ─────────────────
+const CAT_LABELS = {
+  realistic: { en: 'Realistic',      tr: 'Gerçekçi' },
+  microreal: { en: 'Micro Real',     tr: 'Mikro Gerçekçi' },
+  graywash:  { en: 'Graywash',       tr: 'Gri Yıkama' },
+  colorart:  { en: 'Color Art',      tr: 'Renkli Dövme' },
+  fineline:  { en: 'Fine Line',      tr: 'İnce Çizgi' },
+  blackgray: { en: 'Black & Gray',   tr: 'Siyah & Gri' },
+  dotwork:   { en: 'Dotwork',        tr: 'Nokta Çalışması' },
+  coverup:   { en: 'Cover Up',       tr: 'Kapama' },
+  mandala:   { en: 'Mandala',        tr: 'Mandala' },
+};
+
+// ── Render gallery from gallery-data.js ───────
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid || typeof GALLERY_DATA === 'undefined') return;
+
+  grid.innerHTML = GALLERY_DATA.map(item => {
+    const dataCat = item.cats.join(' ');
+    const catEn   = item.cats.map(c => (CAT_LABELS[c] || {}).en || c).join(' · ');
+    const catTr   = item.cats.map(c => (CAT_LABELS[c] || {}).tr || c).join(' · ');
+    return `<div class="gallery-item" data-cat="${dataCat}" onclick="openLightbox(this)">
+        <img src="${item.src}" alt="${item.id}" loading="lazy">
+        <div class="gallery-overlay">
+          <span class="gallery-cats" data-en="${catEn}" data-tr="${catTr}">${catEn}</span>
+          <span class="gallery-id">${item.id}</span>
+        </div>
+      </div>`;
+  }).join('\n      ');
+
+  // Apply current language to freshly rendered items
+  applyLang(currentLang);
+}
+
 // ── Gallery filter ────────────────────────────
 // data-cat supports multiple space-separated slugs, e.g. data-cat="realistic blackgray"
 function filterGallery(cat, btn) {
@@ -852,6 +887,7 @@ function animateCounters() {
 
 // ── Init ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  renderGallery();       // build cards from gallery-data.js
   applyLang(currentLang);
   applyFilterFromURL();
   animateCounters();
