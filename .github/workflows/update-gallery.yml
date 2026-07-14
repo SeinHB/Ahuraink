@@ -1,0 +1,31 @@
+name: Update Gallery Data
+
+on:
+  push:
+    paths:
+      - 'gallery/**'
+
+jobs:
+  update-gallery:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate gallery-data.js
+        run: python generate_gallery.py
+
+      - name: Commit updated gallery-data.js
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add gallery-data.js
+          git diff --staged --quiet || git commit -m "Auto-update gallery data [skip ci]"
+          git push
