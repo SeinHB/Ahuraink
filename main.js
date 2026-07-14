@@ -128,44 +128,55 @@ let currentDesign = { id: '', cats: '' };
 // ── Lightbox ──────────────────────────────────
 function openLightbox(el) {
   const lb = document.getElementById('lightbox');
-  const catsEl = el.querySelector('.gallery-cats');
-  const idEl   = el.querySelector('.gallery-id');
-  const srcImg = el.querySelector('img');
+  const catsEl  = el.querySelector('.gallery-cats');
+  const idEl    = el.querySelector('.gallery-id');
+  const srcImg  = el.querySelector('img');
+  const dataCat = el.dataset.cat || ''; // space-separated slugs e.g. "realistic blackgray"
 
-  const catText = catsEl ? catsEl.textContent : '';
+  const catText = catsEl ? catsEl.textContent : ''; // display text e.g. "Realistic · Black & Gray"
   const idText  = idEl  ? idEl.textContent   : '';
 
   // store for booking form
   currentDesign.id   = idText;
   currentDesign.cats = catText;
 
-  // Build image frame content: photo + id badge + lens div
+  // Build image frame: photo + lens (no badge here anymore)
   const imgFrame = document.getElementById('lightboxImage');
   const imgSrc   = srcImg ? srcImg.src : '';
   imgFrame.innerHTML = imgSrc
     ? `<img src="${imgSrc}" alt="${idText}">
-       <div class="lightbox-id-badge">${idText}</div>
        <div class="lightbox-lens" id="lightboxLens"></div>`
-    : `<div class="lightbox-id-badge">${idText}</div>`;
+    : '';
 
-  // Desktop title (ID number in info panel)
+  // Desktop: ID as title in info panel
   const titleEl = document.getElementById('lightboxTitle');
   if (titleEl) titleEl.textContent = idText;
 
-  // Build category chips
+  // Mobile: ID badge beside chips
+  const badgeEl = document.getElementById('lightboxIdBadge');
+  if (badgeEl) badgeEl.textContent = idText;
+
+  // Build chips using slugs (for filtering) mapped to display labels
   const chipsEl = document.getElementById('lightboxChips');
-  const chipList = catText
-    ? catText.split(' · ').map(c =>
-        `<span class="lightbox-chip">${c.trim()}</span>`
-      ).join('')
-    : '';
-  chipsEl.innerHTML = chipList;
+  const slugs   = dataCat.split(' ').filter(Boolean);
+  const labels  = catText.split(' · ').map(s => s.trim()).filter(Boolean);
+  chipsEl.innerHTML = slugs.map((slug, i) => {
+    const label = labels[i] || slug;
+    return `<span class="lightbox-chip" onclick="lightboxChipClick('${slug}')">${label}</span>`;
+  }).join('');
 
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Wire up magnifier after DOM is updated
+  // Wire magnifier after DOM is updated
   initMagnifier();
+}
+
+// ── Chip click — close lightbox & apply filter ─
+function lightboxChipClick(slug) {
+  closeLightbox();
+  const btn = document.querySelector(`.filter-btn[onclick*="'${slug}'"]`);
+  filterGallery(slug, btn);
 }
 
 // ── Magnifying glass (desktop only) ───────────
